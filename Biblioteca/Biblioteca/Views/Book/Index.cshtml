@@ -1,0 +1,84 @@
+﻿@model IEnumerable<Biblioteca.Models.Book>
+
+@{
+    ViewBag.Title = "Book";
+}
+
+<h2>Books</h2>
+
+<div>
+   
+    <hr />
+  
+
+
+        <table style="width:200px;column-width:40px" >
+            <tr>
+                <th>Name</th>
+                <th>ISBN</th>
+                <th>Release Date</th>
+            </tr>
+         
+            @foreach (var book in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(item => book.Name)</td>
+                    <td>@Html.DisplayFor(item => book.ISBN)</td>
+                    <td>@Html.DisplayFor(item => book.ReleaseDate)</td>
+                </tr>
+
+
+                    <!--<dt>
+                       Html.DisplayFor(mode=>book.NrCopies)
+                    </dt>
+                    <dt>
+                            Html.DisplayFor(model=>book.OnLoan)
+                    </dt>
+                    <dt>
+                        Html.DisplayFor(model=>book.ShelfID)
+                    </dt>-->
+            }
+        </table>
+
+</div>
+
+    <!--<form method="post" action="">
+        <table>
+            Add a new book:
+            <tr></tr>
+            <tr>
+                <td>Name: </td>
+                <td><input type="text" name="name"></td>
+            </tr>
+            <tr>
+                <td>ISBN: </td>
+                <td><input type="text" name="isbn"></td>
+            </tr>
+            <tr>
+                <td>Release Date: </td>
+                <td><input type="text" name="release"></td>
+            </tr>
+            <tr>
+                <td>Copies: </td>
+                <td><input type="text" name="copies"></td>
+            </tr>
+            <tr>
+                <td>Shelf: </td>
+                <td><input type="text" name="shelf"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit"></td>
+            </tr>
+        </table>
+    </form>-->
+
+<p>
+    <hr/>
+    <table>
+        <tr><td>@Html.ActionLink("Update a book`s info", "Index")</td></tr>
+        <tr><td>@Html.ActionLink("Add a new book", "AddBook")</td></tr>
+        <tr><td>@Html.ActionLink("Back to List", "Index")</td></tr>
+        <tr><td>@Html.ActionLink("Delete a book from DB", "Index")</td></tr>
+    </table>
+</p>

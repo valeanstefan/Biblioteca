@@ -77,6 +77,5 @@ D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\bin\Microsoft.Owin.S
 D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\bin\Microsoft.Owin.Security.Google.xml
 D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\bin\Microsoft.Owin.Security.Twitter.xml
 D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\obj\Debug\Biblioteca.csprojResolveAssemblyReference.cache
 D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\obj\Debug\Biblioteca.dll
 D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\obj\Debug\Biblioteca.pdb

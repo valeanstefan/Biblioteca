@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="LibraryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Authors">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="first_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="last_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Library.dbo.BookAuthors' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="BookAuthors">
+    <Key>
+      <PropertyRef Name="author_id" />
+      <PropertyRef Name="book_id" />
+    </Key>
+    <Property Name="author_id" Type="int" Nullable="false" />
+    <Property Name="book_id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Books">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ISBN" Type="int" Nullable="false" />
+    <Property Name="release_date" Type="datetime" Nullable="false" />
+    <Property Name="on_loan" Type="int" />
+    <Property Name="nr_copies" Type="int" />
+    <Property Name="shelf_id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Shelfs">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="domain" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Author_ID">
+    <End Role="Authors" Type="Self.Authors" Multiplicity="1" />
+    <End Role="BookAuthors" Type="Self.BookAuthors" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Authors">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="BookAuthors">
+        <PropertyRef Name="author_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Book_ID">
+    <End Role="Books" Type="Self.Books" Multiplicity="1" />
+    <End Role="BookAuthors" Type="Self.BookAuthors" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Books">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="BookAuthors">
+        <PropertyRef Name="book_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Book_Shelf">
+    <End Role="Shelfs" Type="Self.Shelfs" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Books" Type="Self.Books" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Shelfs">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Books">
+        <PropertyRef Name="shelf_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="LibraryModelStoreContainer">
+    <EntitySet Name="Authors" EntityType="Self.Authors" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Books" EntityType="Self.Books" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Shelfs" EntityType="Self.Shelfs" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BookAuthors" EntityType="Self.BookAuthors" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [BookAuthors].[author_id] AS [author_id], 
+    [BookAuthors].[book_id] AS [book_id]
+    FROM [dbo].[BookAuthors] AS [BookAuthors]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_Author_ID" Association="Self.FK_Author_ID">
+      <End Role="Authors" EntitySet="Authors" />
+      <End Role="BookAuthors" EntitySet="BookAuthors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Book_ID" Association="Self.FK_Book_ID">
+      <End Role="Books" EntitySet="Books" />
+      <End Role="BookAuthors" EntitySet="BookAuthors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Book_Shelf" Association="Self.FK_Book_Shelf">
+      <End Role="Shelfs" EntitySet="Shelfs" />
+      <End Role="Books" EntitySet="Books" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

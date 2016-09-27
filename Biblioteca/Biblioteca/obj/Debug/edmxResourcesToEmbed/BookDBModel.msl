@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="LibraryModelStoreContainer" CdmEntityContainer="LibraryEntities">
+    <EntitySetMapping Name="Authors">
+      <EntityTypeMapping TypeName="LibraryModel.Author">
+        <MappingFragment StoreEntitySet="Authors">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="first_name" ColumnName="first_name" />
+          <ScalarProperty Name="last_name" ColumnName="last_name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Books">
+      <EntityTypeMapping TypeName="LibraryModel.Book">
+        <MappingFragment StoreEntitySet="Books">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+          <ScalarProperty Name="release_date" ColumnName="release_date" />
+          <ScalarProperty Name="on_loan" ColumnName="on_loan" />
+          <ScalarProperty Name="nr_copies" ColumnName="nr_copies" />
+          <ScalarProperty Name="shelf_id" ColumnName="shelf_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Shelfs">
+      <EntityTypeMapping TypeName="LibraryModel.Shelf">
+        <MappingFragment StoreEntitySet="Shelfs">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="domain" ColumnName="domain" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="BookAuthors" TypeName="LibraryModel.BookAuthors" StoreEntitySet="BookAuthors">
+      <EndProperty Name="Authors">
+        <ScalarProperty Name="id" ColumnName="author_id" />
+      </EndProperty>
+      <EndProperty Name="Books">
+        <ScalarProperty Name="id" ColumnName="book_id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

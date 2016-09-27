@@ -1,0 +1,33 @@
+﻿@model Biblioteca.Models.AddBook
+@{
+    ViewBag.Title = "AddBook";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="create-label">
+        @Html.LabelFor(model=>model.Name)
+    </div>
+    <div class="create-field">
+        @Html.TextBoxFor(model=>model.Name)
+    </div>
+
+    <div class="create-label">
+        @Html.LabelFor(model => model.ISBN)
+    </div>
+    <div class="create-field">
+        @Html.TextBoxFor(model => model.ISBN)
+    </div>
+
+    <div class="create-label">
+        @Html.LabelFor(model => model.ReleaseDate)
+    </div>
+    <div class="create-field">
+        @Html.TextBoxFor(model => model.ReleaseDate)
+    </div>
+    <input type="submit" value="Add Book "/>
+}
+
+

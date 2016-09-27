@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="LibraryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Author">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="first_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="last_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Books" Relationship="Self.BookAuthors" FromRole="Authors" ToRole="Books" />
+  </EntityType>
+  <EntityType Name="Book">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ISBN" Type="Int32" Nullable="false" />
+    <Property Name="release_date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="on_loan" Type="Int32" />
+    <Property Name="nr_copies" Type="Int32" />
+    <Property Name="shelf_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Shelf" Relationship="Self.FK_Book_Shelf" FromRole="Books" ToRole="Shelfs" />
+    <NavigationProperty Name="Authors" Relationship="Self.BookAuthors" FromRole="Books" ToRole="Authors" />
+  </EntityType>
+  <EntityType Name="Shelf">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="domain" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Books" Relationship="Self.FK_Book_Shelf" FromRole="Shelfs" ToRole="Books" />
+  </EntityType>
+  <Association Name="FK_Book_Shelf">
+    <End Role="Shelfs" Type="Self.Shelf" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Books" Type="Self.Book" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Shelfs">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Books">
+        <PropertyRef Name="shelf_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="BookAuthors">
+    <End Role="Authors" Type="Self.Author" Multiplicity="*" />
+    <End Role="Books" Type="Self.Book" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="LibraryEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Authors" EntityType="Self.Author" />
+    <EntitySet Name="Books" EntityType="Self.Book" />
+    <EntitySet Name="Shelfs" EntityType="Self.Shelf" />
+    <AssociationSet Name="FK_Book_Shelf" Association="Self.FK_Book_Shelf">
+      <End Role="Shelfs" EntitySet="Shelfs" />
+      <End Role="Books" EntitySet="Books" />
+    </AssociationSet>
+    <AssociationSet Name="BookAuthors" Association="Self.BookAuthors">
+      <End Role="Authors" EntitySet="Authors" />
+      <End Role="Books" EntitySet="Books" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
