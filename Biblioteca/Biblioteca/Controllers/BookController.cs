@@ -14,6 +14,7 @@ namespace Biblioteca.Controllers
         // GET: Book
 
         private BookDbContext db = new BookDbContext();
+        private AuthorDbContext adb = new AuthorDbContext();
         public ActionResult Index()
         {
             var BooksFromContext = db.Books.ToList();
@@ -50,10 +51,65 @@ namespace Biblioteca.Controllers
             return View(book);
         }
 
-        public ActionResult AddBook()
+        public ActionResult AddBook(AddBook model)
         {
-           var book = new Biblioteca.Models.AddBook();
-            return View(book);
+            var book = new Biblioteca.Models.Book
+            {
+                Name = model.Name,
+                ISBN = model.ISBN,
+                ReleaseDate = model.ReleaseDate,
+                OnLoan = model.OnLoan,
+                NrCopies = model.NrCopies,
+                ShelfID=model.ShelfID
+                
+                
+            };
+            Book Book = new Biblioteca.Book
+            {
+                name = book.Name,
+                ISBN = book.ISBN,
+                release_date = book.ReleaseDate,
+                nr_copies=book.NrCopies,
+                on_loan=book.OnLoan,
+                shelf_id=book.ShelfID
+                
+            };
+
+            var author = new Biblioteca.Models.Author
+            {
+                
+                 FirstName= model.FirstName,
+                LastName = model.LastName
+                
+            };
+            Author auth = new Author
+            {
+                first_name = author.FirstName,
+                last_name = author.LastName
+
+            };
+
+            using (var aut = new AuthorDbContext())
+            {
+                aut.authors.Add(auth);
+
+            }
+
+            using (var bk = new BookDbContext())
+            {
+                bk.Books.Add(Book);
+            }
+
+            if (ModelState.IsValid)
+            {
+                db.Books.Add(Book);
+                adb.authors.Add(auth);
+                adb.SaveChanges();
+                db.SaveChanges();
+                    return RedirectToAction("Index");
+            }
+
+            return View();
         }
     }
 }

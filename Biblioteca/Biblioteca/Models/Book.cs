@@ -16,6 +16,17 @@ namespace Biblioteca.Models
         public int? OnLoan { get; set; }
         public int? NrCopies { get; set; }
         public int ShelfID { get; set; }
+        public List<Author> authors { get; set; }
+    }
+    public class Author
+    {
+        public int ID { get; set;}
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string toString()
+        {
+            return String.Concat(FirstName.ToString(),"",LastName.ToString());
+        }
     }
 
     public class AddBook
@@ -29,6 +40,25 @@ namespace Biblioteca.Models
         [Required]
         [Display(Name = "Release Date")]
         public DateTime ReleaseDate { get; set; }
+        [Required]
+        [Display(Name = "FirstName")]
+        public string FirstName { get; set; }
+        [Required]
+        [Display(Name = "LastName")]
+        public string LastName { get; set; }
+        [Required]
+        [Display(Name = "ShelfID")]
+        public int ShelfID { get; set; }
+        [Required]
+        [Display(Name = "OnLoan")]
+        public int OnLoan { get; set; }
+        [Required]
+        [Display(Name = "Nr. Copies")]
+        public int NrCopies { get; set; }
+        
+                
+
+
 
 
 

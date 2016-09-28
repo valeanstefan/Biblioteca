@@ -4,8 +4,25 @@
 }
 
 <h2>@ViewBag.Title</h2>
+<SCRIPT language="javascript">
+function add(value) {
 
-@using (Html.BeginForm())
+	//Create an input type dynamically.
+	var element = document.createElement("input");
+
+    //Assign different attributes to the element.
+    element.setAttribute()
+
+
+	var foo = document.getElementById("fooBar");
+
+	//Append the element in page (in span).
+	foo.appendChild(element);
+
+}
+</SCRIPT>
+
+@using (Html.BeginForm(FormMethod.Post))
 {
     <div class="create-label">
         @Html.LabelFor(model=>model.Name)
@@ -20,14 +37,57 @@
     <div class="create-field">
         @Html.TextBoxFor(model => model.ISBN)
     </div>
-
+    
     <div class="create-label">
         @Html.LabelFor(model => model.ReleaseDate)
     </div>
     <div class="create-field">
         @Html.TextBoxFor(model => model.ReleaseDate)
     </div>
+    <div class="create-label">
+        @Html.LabelFor(model=>model.OnLoan)
+    </div>
+    <div class="create-field">
+        @Html.TextBoxFor(model=>model.OnLoan)
+    </div>
+    <div class="create-label">
+        @Html.LabelFor(model=>model.NrCopies)
+    </div>
+    <div class="create-field">
+        @Html.TextBoxFor(model=>model.NrCopies)
+    </div>
+    <div class="create-label">
+        @Html.LabelFor(model=>model.ShelfID)
+    </div>
+    <div class="create-field">
+        @Html.TextBoxFor(model=>model.ShelfID)
+    </div>
+    <div>
+        <label>Number of authors</label>
+        <select name="element" onselect="add(element.value)">
+            <option value="1"> 1 </option>
+            <option value="2"> 2 </option>
+            <option value="3"> 3 </option>
+        </select>
+    </div>
+    <div class="create-label">
+        <label> Author </label>
+    </div>
+    <div class="create-label">
+        @Html.LabelFor(model=>model.FirstName)
+    </div>
+    <div class="create-field">
+        @Html.TextBoxFor(model=>model.FirstName)
+    </div>
+    <div class="create-label">
+        @Html.LabelFor(model=>model.LastName)
+    </div>
+    <div class="create-field">
+        @Html.TextBoxFor(model=>model.LastName)
+    </div>
+
     <input type="submit" value="Add Book "/>
+    @Html.ActionLink("Back", "Index")
 }
 
 
