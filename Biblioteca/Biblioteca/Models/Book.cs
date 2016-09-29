@@ -31,6 +31,9 @@ namespace Biblioteca.Models
 
     public class AddBook
     {
+        
+        public int ID { get; set; }
+        public int AID { get; set; }
         [Required]
         [Display(Name = "Name")]
         public string Name { get; set; }
@@ -51,10 +54,10 @@ namespace Biblioteca.Models
         public int ShelfID { get; set; }
         [Required]
         [Display(Name = "OnLoan")]
-        public int OnLoan { get; set; }
+        public int? OnLoan { get; set; }
         [Required]
         [Display(Name = "Nr. Copies")]
-        public int NrCopies { get; set; }
+        public int? NrCopies { get; set; }
         
                 
 

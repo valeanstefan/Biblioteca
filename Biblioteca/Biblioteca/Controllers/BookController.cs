@@ -6,6 +6,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Biblioteca.DataAccess;
+using System.Data.Entity;
 
 namespace Biblioteca.Controllers
 {
@@ -109,6 +110,54 @@ namespace Biblioteca.Controllers
                     return RedirectToAction("Index");
             }
 
+            return View();
+        }
+        
+        public ActionResult Edit(int id=1 ,int aid=1)
+        {
+            Book book = db.Books.Find(id);
+            Author auth = adb.authors.Find(aid);
+            if (book == null)
+            {
+                return HttpNotFound();
+            }
+
+            AddBook edit = new Biblioteca.Models.AddBook
+            {
+                ISBN = book.ISBN,
+                Name = book.name,
+                ReleaseDate = book.release_date,
+                OnLoan = book.on_loan,
+                NrCopies = book.nr_copies
+            };
+                
+                         
+            return View(edit);
+           
+        }
+        [HttpPost]
+        public ActionResult Edit (Book book,Author auth)
+        {
+            
+            db.Books.
+            if (ModelState.IsValid)
+            {
+                db.Entry(book).State = EntityState.Modified;
+                db.Entry(auth).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            //AddBook edit = new AddBook
+            //{
+            //    FirstName=auth.first_name,
+            //    LastName = auth.last_name,
+
+            //    ISBN = book.ISBN,
+            //    Name= book.name,
+            //    ReleaseDate = book.release_date,
+            //    OnLoan = book.on_loan,
+            //    NrCopies = book.nr_copies
+            //};
             return View();
         }
     }

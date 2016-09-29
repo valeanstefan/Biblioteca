@@ -25,6 +25,10 @@
                     <td>@Html.DisplayFor(item => book.Name)</td>
                     <td>@Html.DisplayFor(item => book.ISBN)</td>
                     <td>@Html.DisplayFor(item => book.ReleaseDate)</td>
+                    <td>
+                        @Html.ActionLink("Edit","Edit",new { id=book.ID})
+                        @Html.ActionLink("Delete", "Index",new { id=book.ID})
+                    </td>
                 </tr>
 
 
@@ -80,9 +84,8 @@
 <p>
     <hr/>
     <table>
-        <tr><td>@Html.ActionLink("Update a book`s info", "Index")</td></tr>
-        <tr><td>@Html.ActionLink("Add a new book", "AddBook")</td></tr>
-        <tr><td>@Html.ActionLink("Back to List", "Index")</td></tr>
-        <tr><td>@Html.ActionLink("Delete a book from DB", "Index")</td></tr>
+        <tr>
+        <td>@Html.ActionLink("Add a new book", "AddBook")</td>
+        </tr>
     </table>
 </p>
