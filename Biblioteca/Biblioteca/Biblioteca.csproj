@@ -224,9 +224,7 @@
     <Compile Include="Controllers\BookController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="DataAccess\AuthorDbContext.cs" />
     <Compile Include="DataAccess\BookDbContext.cs" />
-    <Compile Include="DataAccess\ShelfDbContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -239,6 +237,7 @@
       <DependentUpon>BookDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
+    <Compile Include="WebExtension\AuthorExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="BookDBModel.Context.tt">

@@ -23,10 +23,7 @@ namespace Biblioteca.Models
         public int ID { get; set;}
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string toString()
-        {
-            return String.Concat(FirstName.ToString(),"",LastName.ToString());
-        }
+       
     }
 
     public class AddBook

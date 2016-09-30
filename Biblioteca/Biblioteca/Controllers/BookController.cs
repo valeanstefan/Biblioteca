@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Biblioteca.DataAccess;
 using System.Data.Entity;
-
+using Biblioteca.WebExtension;
 namespace Biblioteca.Controllers
 {
     public class BookController : Controller
@@ -15,7 +15,7 @@ namespace Biblioteca.Controllers
         // GET: Book
 
         private BookDbContext db = new BookDbContext();
-        private AuthorDbContext adb = new AuthorDbContext();
+        
         public ActionResult Index()
         {
             var BooksFromContext = db.Books.ToList();
@@ -25,13 +25,14 @@ namespace Biblioteca.Controllers
             BooksFromContext.ForEach(b => Books.Add(
                 new Biblioteca.Models.Book
                 {
-                ID = b.id,
-                Name=b.name,
-                ISBN=b.ISBN,
-                ReleaseDate=b.release_date,
-                ShelfID=b.shelf_id,
-                OnLoan=b.on_loan,
-                NrCopies=b.nr_copies
+                    ID = b.id,
+                    Name = b.name,
+                    ISBN = b.ISBN,
+                    ReleaseDate = b.release_date,
+                    ShelfID = b.shelf_id,
+                    OnLoan = b.on_loan,
+                    NrCopies = b.nr_copies,
+                    authors = b.Authors.toModel()
                 }
                 ));
 
@@ -90,22 +91,13 @@ namespace Biblioteca.Controllers
 
             };
 
-            using (var aut = new AuthorDbContext())
-            {
-                aut.authors.Add(auth);
-
-            }
-
-            using (var bk = new BookDbContext())
-            {
-                bk.Books.Add(Book);
-            }
-
+                db.Books.Add(Book);
+                db.authors.Add(auth);
+            
             if (ModelState.IsValid)
             {
                 db.Books.Add(Book);
-                adb.authors.Add(auth);
-                adb.SaveChanges();
+                db.authors.Add(auth);
                 db.SaveChanges();
                     return RedirectToAction("Index");
             }
@@ -113,10 +105,10 @@ namespace Biblioteca.Controllers
             return View();
         }
         
-        public ActionResult Edit(int id=1 ,int aid=1)
+        public ActionResult Edit(int id=0 ,int aid=0)
         {
             Book book = db.Books.Find(id);
-            Author auth = adb.authors.Find(aid);
+            Author auth = db.authors.Find(aid);
             if (book == null)
             {
                 return HttpNotFound();
@@ -128,7 +120,10 @@ namespace Biblioteca.Controllers
                 Name = book.name,
                 ReleaseDate = book.release_date,
                 OnLoan = book.on_loan,
-                NrCopies = book.nr_copies
+                NrCopies = book.nr_copies,
+                FirstName = auth.first_name,
+                LastName = auth.last_name
+               
             };
                 
                          
@@ -136,10 +131,24 @@ namespace Biblioteca.Controllers
            
         }
         [HttpPost]
-        public ActionResult Edit (Book book,Author auth)
+        public ActionResult Edit (AddBook edited)
         {
-            
-            db.Books.
+
+            Book book = new Book
+            {
+                ISBN = edited.ISBN,
+                name = edited.Name,
+                nr_copies = edited.NrCopies,
+                on_loan = edited.OnLoan,
+                release_date = edited.ReleaseDate
+            };
+            Author auth = new Author
+            {
+                first_name = edited.FirstName,
+                last_name = edited.LastName
+            };
+            db.authors.Add(auth);
+            db.Books.Add(book);
             if (ModelState.IsValid)
             {
                 db.Entry(book).State = EntityState.Modified;

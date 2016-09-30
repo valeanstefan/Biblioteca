@@ -10,6 +10,9 @@ namespace Biblioteca.DataAccess
     {
         
             public DbSet<Book> Books { get; set; }
+            public DbSet<Author> authors { get; set; }
+            public DbSet<Shelf> Shelfs { get; set; }
+            //public DbSet<>
             public BookDbContext() : base("name=LibraryEntities")
             { }
         
