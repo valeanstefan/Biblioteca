@@ -23,17 +23,21 @@
             @foreach (var book in Model)
             {
                 <tr>
+                    <td>
+                        @Html.DisplayFor(item => book.ID)
+                </td>
                     <td>@Html.DisplayFor(item => book.Name)</td>
                     <td>@Html.DisplayFor(item => book.ISBN)</td>
                     <td>@Html.DisplayFor(item => book.ReleaseDate)</td>
                     @foreach (var auth in book.authors)
                     {
-                    <td>@Html.DisplayFor(item  => auth.FirstName)</td>
+                        <td>@Html.DisplayFor(item=>auth.ID)</td>
+                    <td>@Html.DisplayFor(item => auth.FirstName)</td>
                     <td>@Html.DisplayFor(item => auth.LastName)</td>
                     }
                     <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = book.ID ,aid = book.authors.Select(auth=>auth.ID)} )
-                        @Html.ActionLink("Delete", "Index",new { id=book.ID})
+                        @Html.ActionLink("Edit", "Edit", new { id = book.ID,aut=(from author in book.authors select author.ID), count = (from author in book.authors select author.ID).Count()})
+                        @Html.ActionLink("Delete", "Index", new { id = book.ID })
                     </td>
                 </tr>
 
@@ -47,7 +51,7 @@
                     <dt>
                         Html.DisplayFor(model=>book.ShelfID)
                     </dt>-->
-            }
+                }
             
 
            

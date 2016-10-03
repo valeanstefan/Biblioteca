@@ -105,29 +105,35 @@ namespace Biblioteca.Controllers
             return View();
         }
         
-        public ActionResult Edit(int id=0 ,int aid=0)
+        public ActionResult Edit(int id=0 ,List<Author> aut=null, int count = 0)
         {
             Book book = db.Books.Find(id);
-            Author auth = db.authors.Find(aid);
+
+           // Author auth = db.authors.Find(aid);
+            
             if (book == null)
             {
                 return HttpNotFound();
             }
 
-            AddBook edit = new Biblioteca.Models.AddBook
-            {
-                ISBN = book.ISBN,
-                Name = book.name,
-                ReleaseDate = book.release_date,
-                OnLoan = book.on_loan,
-                NrCopies = book.nr_copies,
-                FirstName = auth.first_name,
-                LastName = auth.last_name
-               
-            };
-                
-                         
-            return View(edit);
+
+           // AddBook edit = new Biblioteca.Models.AddBook
+           //{
+           //     AID = aut.ElementAt(0).id,
+           //     ID = book.id,
+           //     FirstName = auth.first_name,
+           //     LastName = auth.last_name,
+           //     Name = book.name,
+           //     ReleaseDate = book.release_date,
+           //     OnLoan = book.on_loan,
+           //     ISBN = book.ISBN,
+           //     NrCopies = book.nr_copies
+
+           // };
+
+
+
+            return View();
            
         }
         [HttpPost]
