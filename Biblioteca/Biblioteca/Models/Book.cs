@@ -25,6 +25,11 @@ namespace Biblioteca.Models
         public string LastName { get; set; }
        
     }
+    public class Shelf
+    {
+        public int ID { get; set; }
+        public string Domain { get; set;}
+    }
 
     public class AddBook
     {

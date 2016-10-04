@@ -5,15 +5,31 @@ using System.Web;
 
 namespace Biblioteca.WebExtension
 {
-    using MA = Biblioteca.Models.Author;
     public static class AuthorExtensions
     {
-        public static List<MA> toModel(this ICollection<Author> authors)
+        public static Biblioteca.Models.Author toModel(this Biblioteca.DataAccess.BookAuthor bookAuthor)
         {
-            List<MA> ModelAuthors = new List<MA>();
-            foreach(var BA in authors)
+            if (bookAuthor == null)
             {
-                ModelAuthors.Add(new MA { FirstName = BA.first_name, LastName = BA.last_name, ID=BA.id });
+                return null;
+            }
+
+            Biblioteca.Models.Author author = new Biblioteca.Models.Author
+            {
+                FirstName = bookAuthor.Author.first_name,
+                LastName = bookAuthor.Author.last_name,
+                ID = bookAuthor.Author.id
+            };
+
+            return author;
+        }
+
+        public static List<Biblioteca.Models.Author> toModel(this ICollection<Biblioteca.DataAccess.BookAuthor> authors)
+        {
+            List<Biblioteca.Models.Author> ModelAuthors = new List<Biblioteca.Models.Author>();
+            foreach(Biblioteca.DataAccess.BookAuthor BA in authors)
+            {
+                ModelAuthors.Add(BA.toModel());
             }
             return ModelAuthors;
         }

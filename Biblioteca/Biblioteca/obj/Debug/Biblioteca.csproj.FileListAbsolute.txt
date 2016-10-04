@@ -1,3 +1,4 @@
+D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\obj\Debug\Biblioteca.csprojResolveAssemblyReference.cache
 D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\bin\ApplicationInsights.config
 D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\bin\roslyn\csc.exe
 D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -79,4 +80,3 @@ D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\bin\Microsoft.Owin.S
 D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\obj\Debug\Biblioteca.dll
 D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\obj\Debug\Biblioteca.pdb
-D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\obj\Debug\Biblioteca.csprojResolveAssemblyReference.cache

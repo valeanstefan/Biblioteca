@@ -5,13 +5,14 @@
 
 <h2>Edit</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(FormMethod.Post))
 {
     @Html.ValidationSummary(true)
      <fieldset>
          <legend>Book</legend>
          @Html.HiddenFor(model=>model.ID)
          @Html.HiddenFor(model=>model.AID)
+         @Html.HiddenFor(model=>model.ShelfID)
          <div class="editor-label">
              @Html.LabelFor(model=>model.Name)
          </div>

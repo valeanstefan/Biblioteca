@@ -23,20 +23,18 @@
             @foreach (var book in Model)
             {
                 <tr>
-                    <td>
-                        @Html.DisplayFor(item => book.ID)
-                </td>
+                   
                     <td>@Html.DisplayFor(item => book.Name)</td>
                     <td>@Html.DisplayFor(item => book.ISBN)</td>
                     <td>@Html.DisplayFor(item => book.ReleaseDate)</td>
+                    <td>@Html.DisplayFor(item=>book.ShelfID)</td>
                     @foreach (var auth in book.authors)
-                    {
-                        <td>@Html.DisplayFor(item=>auth.ID)</td>
+                    {                 
                     <td>@Html.DisplayFor(item => auth.FirstName)</td>
                     <td>@Html.DisplayFor(item => auth.LastName)</td>
                     }
                     <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = book.ID,aut=(from author in book.authors select author.ID), count = (from author in book.authors select author.ID).Count()})
+                        @Html.ActionLink("Edit", "Edit", new { id = book.ID, aid=(from author in book.authors select author.ID).First()})
                         @Html.ActionLink("Delete", "Index", new { id = book.ID })
                     </td>
                 </tr>
@@ -63,33 +61,8 @@
     <!--<form method="post" action="">
         <table>
             Add a new book:
-            <tr></tr>
-            <tr>
-                <td>Name: </td>
-                <td><input type="text" name="name"></td>
-            </tr>
-            <tr>
-                <td>ISBN: </td>
-                <td><input type="text" name="isbn"></td>
-            </tr>
-            <tr>
-                <td>Release Date: </td>
-                <td><input type="text" name="release"></td>
-            </tr>
-            <tr>
-                <td>Copies: </td>
-                <td><input type="text" name="copies"></td>
-            </tr>
-            <tr>
-                <td>Shelf: </td>
-                <td><input type="text" name="shelf"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><input type="submit"></td>
-            </tr>
-        </table>
-    </form>-->
+            <tr></tr>-->
+  
 
 <p>
     <hr/>

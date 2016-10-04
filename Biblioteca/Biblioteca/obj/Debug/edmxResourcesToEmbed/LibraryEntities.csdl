@@ -7,7 +7,17 @@
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="first_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="last_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-    <NavigationProperty Name="Books" Relationship="Self.BookAuthors" FromRole="Authors" ToRole="Books" />
+    <NavigationProperty Name="BookAuthors" Relationship="Self.FK_Author_ID" FromRole="Authors" ToRole="BookAuthors" />
+  </EntityType>
+  <EntityType Name="BookAuthor">
+    <Key>
+      <PropertyRef Name="BookAuthorsID" />
+    </Key>
+    <Property Name="author_id" Type="Int32" Nullable="false" />
+    <Property Name="book_id" Type="Int32" Nullable="false" />
+    <Property Name="BookAuthorsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="Author" Relationship="Self.FK_Author_ID" FromRole="BookAuthors" ToRole="Authors" />
+    <NavigationProperty Name="Book" Relationship="Self.FK_Book_ID" FromRole="BookAuthors" ToRole="Books" />
   </EntityType>
   <EntityType Name="Book">
     <Key>
@@ -20,8 +30,8 @@
     <Property Name="on_loan" Type="Int32" />
     <Property Name="nr_copies" Type="Int32" />
     <Property Name="shelf_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="BookAuthors" Relationship="Self.FK_Book_ID" FromRole="Books" ToRole="BookAuthors" />
     <NavigationProperty Name="Shelf" Relationship="Self.FK_Book_Shelf" FromRole="Books" ToRole="Shelfs" />
-    <NavigationProperty Name="Authors" Relationship="Self.BookAuthors" FromRole="Books" ToRole="Authors" />
   </EntityType>
   <EntityType Name="Shelf">
     <Key>
@@ -31,6 +41,30 @@
     <Property Name="domain" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <NavigationProperty Name="Books" Relationship="Self.FK_Book_Shelf" FromRole="Shelfs" ToRole="Books" />
   </EntityType>
+  <Association Name="FK_Author_ID">
+    <End Role="Authors" Type="Self.Author" Multiplicity="1" />
+    <End Role="BookAuthors" Type="Self.BookAuthor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Authors">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="BookAuthors">
+        <PropertyRef Name="author_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Book_ID">
+    <End Role="Books" Type="Self.Book" Multiplicity="1" />
+    <End Role="BookAuthors" Type="Self.BookAuthor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Books">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="BookAuthors">
+        <PropertyRef Name="book_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Book_Shelf">
     <End Role="Shelfs" Type="Self.Shelf" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -45,20 +79,21 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="BookAuthors">
-    <End Role="Authors" Type="Self.Author" Multiplicity="*" />
-    <End Role="Books" Type="Self.Book" Multiplicity="*" />
-  </Association>
-  <EntityContainer Name="LibraryEntities" annotation:LazyLoadingEnabled="true">
+  <EntityContainer Name="LibraryEntities1" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Authors" EntityType="Self.Author" />
+    <EntitySet Name="BookAuthors" EntityType="Self.BookAuthor" />
     <EntitySet Name="Books" EntityType="Self.Book" />
     <EntitySet Name="Shelfs" EntityType="Self.Shelf" />
+    <AssociationSet Name="FK_Author_ID" Association="Self.FK_Author_ID">
+      <End Role="Authors" EntitySet="Authors" />
+      <End Role="BookAuthors" EntitySet="BookAuthors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Book_ID" Association="Self.FK_Book_ID">
+      <End Role="Books" EntitySet="Books" />
+      <End Role="BookAuthors" EntitySet="BookAuthors" />
+    </AssociationSet>
     <AssociationSet Name="FK_Book_Shelf" Association="Self.FK_Book_Shelf">
       <End Role="Shelfs" EntitySet="Shelfs" />
-      <End Role="Books" EntitySet="Books" />
-    </AssociationSet>
-    <AssociationSet Name="BookAuthors" Association="Self.BookAuthors">
-      <End Role="Authors" EntitySet="Authors" />
       <End Role="Books" EntitySet="Books" />
     </AssociationSet>
     <FunctionImport Name="UpdateBooks">
