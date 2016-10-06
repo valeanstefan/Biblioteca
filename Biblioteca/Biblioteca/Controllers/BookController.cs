@@ -20,10 +20,10 @@ namespace Biblioteca.Controllers
         {
             var BooksFromContext = db.Books.ToList();
 
-            var Books = new List<Biblioteca.Models.Book>();
+            var Books = new List<Biblioteca.Models.BookModel>();
 
             BooksFromContext.ForEach(b => Books.Add(
-                new Biblioteca.Models.Book
+                new Biblioteca.Models.BookModel
                 {
                     ID = b.id,
                     Name = b.name,
@@ -52,15 +52,11 @@ namespace Biblioteca.Controllers
             }
             return View(book);
         }
-        public ActionResult AddAuthor()
-        {
-            return View();
-        }
 
-        public ActionResult AddBook(AddBook model)
+        public ActionResult AddBook(BookModel model)
         {
 
-
+            //model.authors = db.Authors.ToList();
             Biblioteca.DataAccess.Book Book = new Biblioteca.DataAccess.Book
             {
                 name = model.Name,
@@ -71,41 +67,32 @@ namespace Biblioteca.Controllers
                 shelf_id=model.ShelfID               
                 
             };
-
-
-            Biblioteca.DataAccess.Author auth = new Biblioteca.DataAccess.Author
-            {
-                first_name = model.FirstName,
-                last_name = model.LastName
-                
-
-            };
-            var ba = new BookAuthor
-            {
-                author_id = model.ID,
-                book_id = model.AID
-            };
+            //var ba = new BookAuthor
+            //{
+            //    author_id = model.ID,
+            //    book_id = model.AID
+            //};
 
             db.Books.Add(Book);
-            db.Authors.Add(auth);
-            db.BookAuthors.Add(ba);
+
+//            db.BookAuthors.Add(ba);
             
             if (ModelState.IsValid)
             {
-                db.BookAuthors.Add(ba);
-                db.Books.Add(Book);
-                db.Authors.Add(auth);
-                db.SaveChanges();
-                    return RedirectToAction("Index");
+  //              db.BookAuthors.Add(ba);
+                //db.Books.Add(Book);
+
+                //db.SaveChanges();
+                  //  return RedirectToAction("Index");
             }
 
             return View();
         }
         
-        public ActionResult Edit(int id=1 ,int aid = 1)
+        public ActionResult Edit(int id=1)
         {
             Biblioteca.DataAccess.Book book = db.Books.Find(id);
-            Biblioteca.DataAccess.Author auth = db.Authors.Find(aid);
+            
             
             if (book == null)
             {
@@ -113,12 +100,10 @@ namespace Biblioteca.Controllers
             }
 
 
-            AddBook edit = new Biblioteca.Models.AddBook
+            BookModel edit = new Biblioteca.Models.BookModel
             {
-                AID = auth.id,
+                
                 ID = book.id,
-                FirstName = auth.first_name,
-                LastName = auth.last_name,
                 Name = book.name,
                 ReleaseDate = book.release_date,
                 OnLoan = book.on_loan,
@@ -134,7 +119,7 @@ namespace Biblioteca.Controllers
            
         }
         [HttpPost]
-        public ActionResult Edit (AddBook edited)
+        public ActionResult Edit (BookModel edited)
         {
             try
             {
@@ -148,21 +133,10 @@ namespace Biblioteca.Controllers
                     release_date = edited.ReleaseDate,
                     shelf_id = edited.ShelfID
                 };
-                Biblioteca.DataAccess.Author auth = new Biblioteca.DataAccess.Author
-                {
-
-                    id = edited.AID,
-                    first_name = edited.FirstName,
-                    last_name = edited.LastName
-                };
-              
-                db.Authors.Add(auth);
                 db.Books.Add(book);
-                
                 if (ModelState.IsValid)
                 {
                     db.Entry(book).State = EntityState.Modified;
-                    db.Entry(auth).State = EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -170,17 +144,7 @@ namespace Biblioteca.Controllers
             {
                 ModelState.AddModelError(String.Empty, ex.Message);
             }
-            //AddBook edit = new AddBook
-            //{
-            //    FirstName=auth.first_name,
-            //    LastName = auth.last_name,
-
-            //    ISBN = book.ISBN,
-            //    Name= book.name,
-            //    ReleaseDate = book.release_date,
-            //    OnLoan = book.on_loan,
-            //    NrCopies = book.nr_copies
-            //};
+        
             return View();
         }
 

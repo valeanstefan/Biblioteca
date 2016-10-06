@@ -7,14 +7,14 @@ namespace Biblioteca.WebExtension
 {
     public static class AuthorExtensions
     {
-        public static Biblioteca.Models.Author toModel(this Biblioteca.DataAccess.BookAuthor bookAuthor)
+        public static Biblioteca.Models.AuthorModel toModel(this Biblioteca.DataAccess.BookAuthor bookAuthor)
         {
             if (bookAuthor == null)
             {
                 return null;
             }
 
-            Biblioteca.Models.Author author = new Biblioteca.Models.Author
+            Biblioteca.Models.AuthorModel author = new Biblioteca.Models.AuthorModel
             {
                 FirstName = bookAuthor.Author.first_name,
                 LastName = bookAuthor.Author.last_name,
@@ -24,9 +24,9 @@ namespace Biblioteca.WebExtension
             return author;
         }
 
-        public static List<Biblioteca.Models.Author> toModel(this ICollection<Biblioteca.DataAccess.BookAuthor> authors)
+        public static List<Biblioteca.Models.AuthorModel> toModel(this ICollection<Biblioteca.DataAccess.BookAuthor> authors)
         {
-            List<Biblioteca.Models.Author> ModelAuthors = new List<Biblioteca.Models.Author>();
+            List<Biblioteca.Models.AuthorModel> ModelAuthors = new List<Biblioteca.Models.AuthorModel>();
             foreach(Biblioteca.DataAccess.BookAuthor BA in authors)
             {
                 ModelAuthors.Add(BA.toModel());

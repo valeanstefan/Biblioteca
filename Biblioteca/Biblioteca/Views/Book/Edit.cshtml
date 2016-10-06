@@ -1,4 +1,4 @@
-﻿@model Biblioteca.Models.AddBook
+﻿@model Biblioteca.Models.BookModel
 @{
     ViewBag.Title = "Edit";
 }
@@ -11,7 +11,7 @@
      <fieldset>
          <legend>Book</legend>
          @Html.HiddenFor(model=>model.ID)
-         @Html.HiddenFor(model=>model.AID)
+      
          @Html.HiddenFor(model=>model.ShelfID)
          <div class="editor-label">
              @Html.LabelFor(model=>model.Name)
@@ -50,26 +50,7 @@
              @Html.TextBoxFor(model=>model.NrCopies)
              @Html.ValidationMessageFor(model=>model.NrCopies)
          </div>
-         <div class="editor-label">
-             <label>Author</label>
-         </div>
-         <div class="editor-label">
-             @Html.ValueFor(model=>model.AID)
-         </div>
-         <div class="editor-label">
-             @Html.LabelFor(model => model.FirstName)
-         </div>
-         <div class="editor-field">
-             @Html.TextBoxFor(model => model.FirstName)
-             @Html.ValidationMessageFor(model=>model.FirstName)
-         </div>
-         <div class="editor-label">
-             @Html.LabelFor(model => model.LastName)
-         </div>
-         <div class="editor-field">
-             @Html.TextBoxFor(model => model.LastName)
-             @Html.ValidationMessageFor(model=>model.LastName)
-         </div>
+         
          <p>
              <input type="submit" value="Save" />
          </p>

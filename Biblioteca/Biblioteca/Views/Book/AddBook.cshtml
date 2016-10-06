@@ -1,26 +1,9 @@
-﻿@model Biblioteca.Models.AddBook
+﻿@model Biblioteca.Models.BookModel
 @{
     ViewBag.Title = "AddBook";
 }
 
 <h2>@ViewBag.Title</h2>
-<SCRIPT language="javascript">
-function add(value) {
-
-	//Create an input type dynamically.
-	var element = document.createElement("input");
-
-    //Assign different attributes to the element.
-    element.setAttribute()
-
-
-	var foo = document.getElementById("fooBar");
-
-	//Append the element in page (in span).
-	foo.appendChild(element);
-
-}
-</SCRIPT>
 
 @using (Html.BeginForm(FormMethod.Post))
 {
@@ -63,28 +46,15 @@ function add(value) {
         @Html.TextBoxFor(model=>model.ShelfID)
     </div>
     <div>
-        <label>Number of authors</label>
-        <select name="element" onselect="add(element.value)">
-            <option value="1"> 1 </option>
-            <option value="2"> 2 </option>
-            <option value="3"> 3 </option>
+        <label>Authors</label>
+        <select name="element">
+           
+            <option value=""></option>
+            
         </select>
     </div>
-    <div class="create-label">
-        <label> Author </label>
-    </div>
-    <div class="create-label">
-        @Html.LabelFor(model=>model.FirstName)
-    </div>
-    <div class="create-field">
-        @Html.TextBoxFor(model=>model.FirstName)
-    </div>
-    <div class="create-label">
-        @Html.LabelFor(model=>model.LastName)
-    </div>
-    <div class="create-field">
-        @Html.TextBoxFor(model=>model.LastName)
-    </div>
+   
+  
 
     <input type="submit" value="Add Book "/>
     @Html.ActionLink("Back", "Index")

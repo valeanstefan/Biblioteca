@@ -36,5 +36,7 @@ namespace Biblioteca.DataAccess
                 .WithRequired(e => e.Shelf)
                 .HasForeignKey(e => e.shelf_id);
         }
+
+        public System.Data.Entity.DbSet<Biblioteca.Models.AuthorModel> AuthorModels { get; set; }
     }
 }
