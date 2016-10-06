@@ -35,7 +35,8 @@
                     }
                     <td>
                         @Html.ActionLink("Edit", "Edit", new { id = book.ID, aid=(from author in book.authors select author.ID).First()})
-                        @Html.ActionLink("Delete", "Index", new { id = book.ID })
+                        @Html.ActionLink("Delete", "Delete", new { id = book.ID })
+
                     </td>
                 </tr>
 

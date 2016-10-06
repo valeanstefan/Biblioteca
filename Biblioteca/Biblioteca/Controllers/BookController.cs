@@ -80,12 +80,19 @@ namespace Biblioteca.Controllers
                 
 
             };
+            var ba = new BookAuthor
+            {
+                author_id = model.ID,
+                book_id = model.AID
+            };
 
-                db.Books.Add(Book);
-                db.Authors.Add(auth);
+            db.Books.Add(Book);
+            db.Authors.Add(auth);
+            db.BookAuthors.Add(ba);
             
             if (ModelState.IsValid)
             {
+                db.BookAuthors.Add(ba);
                 db.Books.Add(Book);
                 db.Authors.Add(auth);
                 db.SaveChanges();
@@ -95,7 +102,7 @@ namespace Biblioteca.Controllers
             return View();
         }
         
-        public ActionResult Edit(int id=0 ,int aid = 0)
+        public ActionResult Edit(int id=1 ,int aid = 1)
         {
             Biblioteca.DataAccess.Book book = db.Books.Find(id);
             Biblioteca.DataAccess.Author auth = db.Authors.Find(aid);
@@ -148,8 +155,10 @@ namespace Biblioteca.Controllers
                     first_name = edited.FirstName,
                     last_name = edited.LastName
                 };
+              
                 db.Authors.Add(auth);
                 db.Books.Add(book);
+                
                 if (ModelState.IsValid)
                 {
                     db.Entry(book).State = EntityState.Modified;
@@ -173,6 +182,30 @@ namespace Biblioteca.Controllers
             //    NrCopies = book.nr_copies
             //};
             return View();
+        }
+
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Biblioteca.DataAccess.Book book = db.Books.Find(id);
+            if (book == null)
+            {
+                return HttpNotFound();
+            }
+            return View(book);
+           
+        }
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            Biblioteca.DataAccess.Book book = db.Books.Find(id);
+            db.Books.Remove(book);
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }

@@ -1,4 +1,3 @@
-D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\obj\Debug\Biblioteca.csprojResolveAssemblyReference.cache
 D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\bin\ApplicationInsights.config
 D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\bin\roslyn\csc.exe
 D:\Valean Stefan\Dot.NET\Repositories\Biblioteca\Biblioteca\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
