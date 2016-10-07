@@ -33,5 +33,7 @@ namespace Biblioteca.DataAccess
         public virtual ICollection<BookAuthor> BookAuthors { get; set; }
 
         public virtual Shelf Shelf { get; set; }
+        
+
     }
 }

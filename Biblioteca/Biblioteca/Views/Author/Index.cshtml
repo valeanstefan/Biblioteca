@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Biblioteca.Models.AuthorModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<div>
+    <hr />
+
+
+
+    <table style="width:200px;column-width:40px">
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr>
+        @foreach(var author in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(a => author.FirstName)</td>
+                <td>@Html.DisplayFor(a=>author.LastName)</td>
+                <td>@Html.ActionLink("Delete","Delete", new {id=author.ID})</td>
+                <td>@Html.ActionLink("Edit", "Edit",new { id= author.ID})</td>
+                
+            </tr>
+        }
+     </table>
+</div>

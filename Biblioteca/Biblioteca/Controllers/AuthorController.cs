@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Biblioteca.Models;
 using Biblioteca.DataAccess;
+using System.Net;
 
 namespace Biblioteca.Controllers
 {
@@ -13,15 +14,30 @@ namespace Biblioteca.Controllers
 
         BookDBContext db = new BookDBContext();
         // GET: Author/Create
-        
-        public ActionResult Create()
+        public ActionResult Index()
+        {
+            var AuthorsFromContext = db.Authors.ToList();
+            var Authors = new List<Biblioteca.Models.AuthorModel>();
+            AuthorsFromContext.ForEach(a => Authors.Add(
+                new Biblioteca.Models.AuthorModel
+                {
+                    ID=a.id,
+                    FirstName=a.first_name,
+                    LastName = a.last_name
+
+                }
+                ));
+
+            return View(Authors);
+        }
+        public ActionResult AddAuthor()
         {
             return View();
         }
 
         // POST: Author/Create
         [HttpPost]
-        public ActionResult Create(AuthorModel author)
+        public ActionResult AddAuthor(AuthorModel author)
         {
             Biblioteca.DataAccess.Author auth = new Author
             {
@@ -32,11 +48,11 @@ namespace Biblioteca.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    // TODO: Add insert logic here
+                   
                     db.Authors.Add(auth);
                     db.SaveChanges();
                 }
-                return RedirectToAction("Index");
+                return Redirect("/Book/");
             }
             catch
             {
@@ -44,26 +60,79 @@ namespace Biblioteca.Controllers
             }
         }
 
-        // GET: Author/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Edit(int ? id)
         {
+
+            Biblioteca.DataAccess.Author author = db.Authors.Find(id);
+            if (author == null)
+            {
+                return HttpNotFound();
+            }
+
+            AuthorModel edit = new AuthorModel
+            {
+                ID = author.id,
+                FirstName = author.first_name,
+                LastName = author.last_name
+            };
+            
+            return View(edit);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(AuthorModel edited)
+        {
+            try{
+            Author auth = new Author
+            {
+                id=edited.ID,
+                first_name = edited.FirstName,
+                last_name = edited.LastName
+            };
+            db.Authors.Add(auth);
+            if (ModelState.IsValid)
+            {
+                db.Entry(auth).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            }catch(Exception ex)
+            {
+                ModelState.AddModelError(String.Empty, ex.Message);
+            }
+
             return View();
         }
 
-        // POST: Author/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, AuthorModel author)
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+            Biblioteca.DataAccess.Author author = db.Authors.Find(id);
+            if(author == null)
+            {
+                return HttpNotFound();
+            }
+            return View(author);
+        }
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
         {
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                Biblioteca.DataAccess.Author author = db.Authors.Find(id);
+                db.Authors.Remove(author);
+                db.SaveChanges();
+                
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                ModelState.AddModelError(String.Empty, ex.Message);
             }
+            return RedirectToAction("Index");
         }
     }
 }

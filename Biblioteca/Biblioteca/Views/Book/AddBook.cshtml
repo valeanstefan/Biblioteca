@@ -47,11 +47,12 @@
     </div>
     <div>
         <label>Authors</label>
-        <select name="element">
-           
-            <option value=""></option>
-            
-        </select>
+        <div>
+            <select>
+                <option value="@"
+            </select>
+           @Html.ListBox("Authors",ViewBag.Authors as MultiSelectList)
+        </div>
     </div>
    
   

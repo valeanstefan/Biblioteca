@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Biblioteca.Models
 {
@@ -17,7 +18,9 @@ namespace Biblioteca.Models
         public int? NrCopies { get; set; }
         public int ShelfID { get; set; }
         public List<AuthorModel> authors { get; set; }
+       
     }
+    
     public class AuthorModel
     {
         public int ID { get; set;}
@@ -25,6 +28,8 @@ namespace Biblioteca.Models
         public string LastName { get; set; }
        
     }
+
+    
     public class ShelfModel
     {
         public int ID { get; set; }

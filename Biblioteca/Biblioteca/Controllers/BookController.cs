@@ -53,10 +53,22 @@ namespace Biblioteca.Controllers
             return View(book);
         }
 
+        private MultiSelectList GetAuthors(string[] selectedValues)
+        {
+
+            List<Author> Authors = db.Authors.ToList();
+            Authors.ForEach(a => a.first_name = a.first_name +" "+ a.last_name);
+       
+
+            return new MultiSelectList(Authors, "id", "first_name", selectedValues);
+
+        }
+
         public ActionResult AddBook(BookModel model)
         {
 
-            //model.authors = db.Authors.ToList();
+            ViewBag.Authors = GetAuthors(null);
+          //  List<Author> authors = db.Authors.Find()
             Biblioteca.DataAccess.Book Book = new Biblioteca.DataAccess.Book
             {
                 name = model.Name,
@@ -64,9 +76,13 @@ namespace Biblioteca.Controllers
                 release_date = model.ReleaseDate,
                 nr_copies=model.NrCopies,
                 on_loan=model.OnLoan,
-                shelf_id=model.ShelfID               
+                shelf_id=model.ShelfID,
+
+               
+                              
                 
             };
+          
             //var ba = new BookAuthor
             //{
             //    author_id = model.ID,
@@ -88,18 +104,18 @@ namespace Biblioteca.Controllers
 
             return View();
         }
+        public ActionResult AddAuthorsToBook()
+        {
+            return View();
+        }
         
         public ActionResult Edit(int id=1)
         {
             Biblioteca.DataAccess.Book book = db.Books.Find(id);
-            
-            
             if (book == null)
             {
                 return HttpNotFound();
             }
-
-
             BookModel edit = new Biblioteca.Models.BookModel
             {
                 
@@ -112,11 +128,7 @@ namespace Biblioteca.Controllers
                 ShelfID= book.shelf_id
 
             };
-
-
-
             return View(edit);
-           
         }
         [HttpPost]
         public ActionResult Edit (BookModel edited)
@@ -147,6 +159,8 @@ namespace Biblioteca.Controllers
         
             return View();
         }
+        
+     
 
         public ActionResult Delete(int? id)
         {
