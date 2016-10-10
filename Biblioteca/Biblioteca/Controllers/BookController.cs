@@ -8,6 +8,8 @@ using System.Web.Mvc;
 using Biblioteca.DataAccess;
 using System.Data.Entity;
 using Biblioteca.WebExtension;
+using Biblioteca.ViewModels;
+
 namespace Biblioteca.Controllers
 {
     public class BookController : Controller
@@ -37,6 +39,42 @@ namespace Biblioteca.Controllers
                 ));
 
             return View(Books);
+        }
+        
+        public ActionResult Create()
+        {
+            var Book = new Book();
+            var AllAuthorsFromContext = from a in db.Authors
+                          select a;
+            BookAuthorViewModel viewModel = new BookAuthorViewModel
+            {
+                Authors = AllAuthorsFromContext.ToList(),
+                Book = Book,
+                SelectedAuthors = new List<int>()
+
+            };
+
+            return View(viewModel);
+            
+        }
+        [HttpPost]
+        public ActionResult Create(BookAuthorViewModel model)
+        {
+            Book book = model.Book;
+           
+
+            if (model.SelectedAuthors != null)
+            {
+                foreach (var AuthorID in model.SelectedAuthors)
+                {
+                    Author author = db.Authors.Where(t => t.id == AuthorID).First();
+                    book.BookAuthors.Add(new BookAuthor { author_id=author.id,book_id=book.id});
+                }
+            }
+            db.Books.Add(book);
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
         public ActionResult Details(int ? id)
@@ -77,10 +115,6 @@ namespace Biblioteca.Controllers
                 nr_copies=model.NrCopies,
                 on_loan=model.OnLoan,
                 shelf_id=model.ShelfID,
-
-               
-                              
-                
             };
           
             //var ba = new BookAuthor

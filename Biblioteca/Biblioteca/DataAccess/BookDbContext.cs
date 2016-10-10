@@ -38,5 +38,7 @@ namespace Biblioteca.DataAccess
         }
 
         public System.Data.Entity.DbSet<Biblioteca.Models.AuthorModel> AuthorModels { get; set; }
+
+      //  public System.Data.Entity.DbSet<Biblioteca.ViewModels.BookAuthorViewModel> BookAuthorViewModels { get; set; }
     }
 }

@@ -213,6 +213,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AuthorList.cs" />
     <Compile Include="Models\BookModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -283,6 +284,7 @@
     <Content Include="Views\Author\Index.cshtml" />
     <Content Include="Views\Author\Delete.cshtml" />
     <Content Include="Views\Author\Edit.cshtml" />
+    <Content Include="Views\Book\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

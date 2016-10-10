@@ -12,12 +12,13 @@
   
 
 
-        <table style="width:200px;column-width:40px" >
+        <table style="width:600px;column-width:40px", class="table-striped table-bordered" >
             <tr>
                 <th>Name</th>
                 <th>ISBN</th>
                 <th>Release Date</th>
                 <th>Author</th>
+                <th></th>
             </tr>
          
             @foreach (var book in Model)
@@ -27,15 +28,17 @@
                     <td>@Html.DisplayFor(item => book.Name)</td>
                     <td>@Html.DisplayFor(item => book.ISBN)</td>
                     <td>@Html.DisplayFor(item => book.ReleaseDate)</td>
-                    @foreach (var auth in book.authors)
-                    {                 
-                    <td>@Html.DisplayFor(item => auth.FirstName)</td>
-                    <td>@Html.DisplayFor(item => auth.LastName)</td>
-                    }
+                   
+                    <td>
+                        @foreach (var auth in book.authors)
+                        {
+                            @Html.DisplayFor(item => auth.FirstName) <span>&nbsp;</span>@Html.DisplayFor(item => auth.LastName)
+
+                        }
+                    </td>
                     <td>
                         @Html.ActionLink("Edit", "Edit", new { id = book.ID})
                         @Html.ActionLink("Delete", "Delete", new { id = book.ID })
-
                     </td>
                 </tr>
 
@@ -72,6 +75,9 @@
         </tr>
         <tr>
             <td>@Html.ActionLink("Add a new author","AddAuthor","Author")</td>
+        </tr>
+        <tr>
+            <td>@Html.ActionLink("New Book", "Create")</td>
         </tr>
     </table>
 </p>

@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Biblioteca.Models;
+using System.Web.Mvc;
+using Biblioteca.DataAccess;
 
 namespace Biblioteca.ViewModels
 {
     public class BookAuthorViewModel
     {
-        List<AuthorModel> authors { get; set; }
-        public int ID { get; set; }
-        public String Name { get; set; }
-        public int ISBN { get; set; }
-        public DateTime ReleaseDate { get; set; }
-        public int? OnLoan { get; set; }
-        public int? NrCopies { get; set; }
-        public int ShelfID { get; set; }
+        public List<Author> Authors { get; set; }
+        public Book Book { get; set; }
+        public List<int> SelectedAuthors { get; set; }
+   
 
     }
 }
