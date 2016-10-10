@@ -150,17 +150,18 @@ namespace Biblioteca.Controllers
             {
                 return HttpNotFound();
             }
-            BookModel edit = new Biblioteca.Models.BookModel
+            List<Author> auth = new List<Author>();
+            foreach(var author in book.BookAuthors)
             {
-                
-                ID = book.id,
-                Name = book.name,
-                ReleaseDate = book.release_date,
-                OnLoan = book.on_loan,
-                ISBN = book.ISBN,
-                NrCopies = book.nr_copies,
-                ShelfID= book.shelf_id
+                auth.Add(author.Author);
+            }
 
+
+            BookAuthorViewModel edit = new BookAuthorViewModel
+            {
+
+                Book = book,
+                Authors = auth
             };
             return View(edit);
         }

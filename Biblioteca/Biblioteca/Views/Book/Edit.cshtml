@@ -1,56 +1,77 @@
-﻿@model Biblioteca.Models.BookModel
+﻿@model Biblioteca.ViewModels.BookAuthorViewModel
 @{
     ViewBag.Title = "Edit";
 }
 
 <h2>Edit</h2>
+<head>
+    <script type="text/javascript">
+        function sayHello() {
+            alert("Hello");
+        }
+    </script>
+</head>
 
 @using (Html.BeginForm(FormMethod.Post))
 {
     @Html.ValidationSummary(true)
      <fieldset>
          <legend>Book</legend>
-         @Html.HiddenFor(model=>model.ID)
+         @Html.HiddenFor(model=>model.Book.id)
       
-         @Html.HiddenFor(model=>model.ShelfID)
+         @Html.HiddenFor(model=>model.Book.shelf_id)
          <div class="editor-label">
-             @Html.LabelFor(model=>model.Name)
+             @Html.LabelFor(model=>model.Book.name)
          </div>
          <div class="editor-field">
-             @Html.TextBoxFor(model=>model.Name)
-             @Html.ValidationMessageFor(model=>model.Name)
+             @Html.TextBoxFor(model=>model.Book.name)
+             @Html.ValidationMessageFor(model=>model.Book.name)
          </div>
 
          <div class="editor-label">
-             @Html.LabelFor(model=>model.ISBN)
+             @Html.LabelFor(model=>model.Book.ISBN)
          </div>
          <div class="editor-field">
-             @Html.TextBoxFor(model => model.ISBN)
-             @Html.ValidationMessageFor(model=>model.ISBN)
+             @Html.TextBoxFor(model => model.Book.ISBN)
+             @Html.ValidationMessageFor(model=>model.Book.ISBN)
          </div>
 
          <div class="editor-label">
-             @Html.LabelFor(model => model.ReleaseDate)
+             @Html.LabelFor(model => model.Book.release_date)
          </div>
          <div class="editor-field">
-             @Html.TextBoxFor(model => model.ReleaseDate)
-             @Html.ValidationMessageFor(model=>model.ReleaseDate)
+             @Html.TextBoxFor(model => model.Book.release_date)
+             @Html.ValidationMessageFor(model=>model.Book.release_date)
          </div>
          <div class="editor-label">
-             @Html.LabelFor(model => model.OnLoan)
+             @Html.LabelFor(model => model.Book.on_loan)
          </div>
          <div class="editor-field">
-             @Html.TextBoxFor(model => model.OnLoan)
-             @Html.ValidationMessageFor(model=>model.OnLoan)
+             @Html.TextBoxFor(model => model.Book.on_loan)
+             @Html.ValidationMessageFor(model=>model.Book.on_loan)
          </div>
          <div class="editor-label">
-             @Html.LabelFor(model=>model.NrCopies)
+             @Html.LabelFor(model=>model.Book.nr_copies)
          </div>
          <div class="editor-field">
-             @Html.TextBoxFor(model=>model.NrCopies)
-             @Html.ValidationMessageFor(model=>model.NrCopies)
+             @Html.TextBoxFor(model=>model.Book.nr_copies)
+             @Html.ValidationMessageFor(model=>model.Book.nr_copies)
          </div>
-         
+         <div>
+             <label>Authors</label>
+         </div>
+         @foreach (var author in Model.Authors)
+         {
+            <div>
+                @Html.LabelFor(model=>author.first_name)
+                @Html.TextBoxFor(model => author.first_name)
+                @Html.LabelFor(model => author.last_name)
+                @Html.TextBoxFor(model => author.last_name)
+                <input type="button" value="-" onclick="sayHello()"/>
+            </div>
+         }
+
+
          <p>
              <input type="submit" value="Save" />
          </p>
