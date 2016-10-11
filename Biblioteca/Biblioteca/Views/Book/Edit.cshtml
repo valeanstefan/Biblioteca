@@ -4,13 +4,42 @@
 }
 
 <h2>Edit</h2>
-<head>
+
     <script type="text/javascript">
-        function sayHello() {
-            alert("Hello");
+
+        function deleteAuthor(bid,aid) {
+            $.ajax({
+                type: "POST",
+                url: 'DeleteBookAuthor',
+                data: { bid: bid, aid: aid }
+
+
+            }).done(function () {
+                alert('Author Deleted');
+            });
+
         }
-    </script>
-</head>
+  
+        //$(document).ready({
+        //    $("#btnminus").click(function(e){
+        //        alert("calling ajax");
+        //        //$.ajax({
+        //        //    type: "POST",
+        //        //    url: 'DeleteBookAuthor',
+        //        //    data: { bid: bid, aid: aid }
+
+
+        //        //}).done(function () {
+        //        //    alert('Author Deleted');
+        //        //});
+
+        //    });
+        //});
+ 
+</script>  
+ 
+
+
 
 @using (Html.BeginForm(FormMethod.Post))
 {
@@ -21,7 +50,7 @@
       
          @Html.HiddenFor(model=>model.Book.shelf_id)
          <div class="editor-label">
-             @Html.LabelFor(model=>model.Book.name)
+             <label>Title</label>
          </div>
          <div class="editor-field">
              @Html.TextBoxFor(model=>model.Book.name)
@@ -37,41 +66,51 @@
          </div>
 
          <div class="editor-label">
-             @Html.LabelFor(model => model.Book.release_date)
+             <label>Release Date</label>
          </div>
          <div class="editor-field">
              @Html.TextBoxFor(model => model.Book.release_date)
              @Html.ValidationMessageFor(model=>model.Book.release_date)
          </div>
          <div class="editor-label">
-             @Html.LabelFor(model => model.Book.on_loan)
+             <label>On Loan Qty</label>
          </div>
          <div class="editor-field">
              @Html.TextBoxFor(model => model.Book.on_loan)
              @Html.ValidationMessageFor(model=>model.Book.on_loan)
          </div>
          <div class="editor-label">
-             @Html.LabelFor(model=>model.Book.nr_copies)
+             <label>Nr Copies</label>
          </div>
          <div class="editor-field">
              @Html.TextBoxFor(model=>model.Book.nr_copies)
              @Html.ValidationMessageFor(model=>model.Book.nr_copies)
          </div>
+         <hr />
          <div>
              <label>Authors</label>
          </div>
          @foreach (var author in Model.Authors)
          {
             <div>
-                @Html.LabelFor(model=>author.first_name)
-                @Html.TextBoxFor(model => author.first_name)
-                @Html.LabelFor(model => author.last_name)
-                @Html.TextBoxFor(model => author.last_name)
-                <input type="button" value="-" onclick="sayHello()"/>
+                <table>
+                    <tr>
+                        <td><label>First Name</label></td>
+                        <td><label>Last Name</label></td>
+                    </tr>
+                    <tr>
+                        <td>@Html.TextBoxFor(model => author.first_name)</td>
+
+                        <td>@Html.TextBoxFor(model => author.last_name)</td>
+                        <td><input type="button" value="-" onclick="deleteAuthor(@Model.Book.id,@author.id)"/></td>
+                        
+                    </tr>
+                
+                </table>
             </div>
          }
-
-
+         <input type="button" value="+" />
+         <hr />
          <p>
              <input type="submit" value="Save" />
          </p>
@@ -80,6 +119,7 @@
      </fieldset>  
       }
 <div>
+    
     @Html.ActionLink("Back to List", "Index")
 </div>
 

@@ -195,8 +195,28 @@ namespace Biblioteca.Controllers
             return View();
         }
         
-     
+        public ActionResult EditAddAuthors(List<Author> currAuthors)
+        {
+            List<Author> remAuthors = db.Authors.ToList();
+            foreach(var author in currAuthors)
+            {
+                remAuthors.Remove(currAuthors.First());
+            }
+            return PartialView(remAuthors);
+        }
+        public ActionResult DeleteBookAuthor(int bid,int aid)
+        {
+            Book book = db.Books.Find(bid);
+            book.BookAuthors.Remove(book.BookAuthors.Where(id=>id.author_id==aid).First());
+            if (ModelState.IsValid)
+            {
+                db.Entry(book).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Edit");
+            }
+            return View();
 
+        }
         public ActionResult Delete(int? id)
         {
             if (id == null)
