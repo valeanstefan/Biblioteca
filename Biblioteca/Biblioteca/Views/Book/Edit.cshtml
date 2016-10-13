@@ -4,40 +4,28 @@
 }
 
 <h2>Edit</h2>
-
+@section Scripts{
     <script type="text/javascript">
 
-        function deleteAuthor(bid,aid) {
-            $.ajax({
-                type: "POST",
-                url: 'DeleteBookAuthor',
-                data: { bid: bid, aid: aid }
+        $(document).ready(function () {
+            $('#btnMinus').click(function () {
+                
+                    var bookId =$('#bookId').val();
+                    var authorId =$('#authorId').val();
+                    $.ajax({
+                        type: "POST",
+                        url: 'DeleteBookAuthor',
+                        data: { bid: bookId, aid: authorId }
+                    }).done(function () {
+                        alert('Author Deleted');
+                    }).error(function(){
+                        alert('Something is not going as supposed');
+                    });
+                });
+            })
 
-
-            }).done(function () {
-                alert('Author Deleted');
-            });
-
-        }
-  
-        //$(document).ready({
-        //    $("#btnminus").click(function(e){
-        //        alert("calling ajax");
-        //        //$.ajax({
-        //        //    type: "POST",
-        //        //    url: 'DeleteBookAuthor',
-        //        //    data: { bid: bid, aid: aid }
-
-
-        //        //}).done(function () {
-        //        //    alert('Author Deleted');
-        //        //});
-
-        //    });
-        //});
- 
-</script>  
- 
+    </script>
+ }
 
 
 
@@ -86,6 +74,7 @@
              @Html.TextBoxFor(model=>model.Book.nr_copies)
              @Html.ValidationMessageFor(model=>model.Book.nr_copies)
          </div>
+       
          <hr />
          <div>
              <label>Authors</label>
@@ -102,8 +91,11 @@
                         <td>@Html.TextBoxFor(model => author.first_name)</td>
 
                         <td>@Html.TextBoxFor(model => author.last_name)</td>
-                        <td><input type="button" value="-" onclick="deleteAuthor(@Model.Book.id,@author.id)"/></td>
-                        
+                        <td><input id="btnMinus" type="button" value="-"/></td>
+                        <td><input id="authorId" type="hidden" value="@author.id" /></td>
+                        <td>
+                            <input type="hidden" id="bookId" value="@Model.Book.id" />
+                        </td>
                     </tr>
                 
                 </table>

@@ -102,47 +102,6 @@ namespace Biblioteca.Controllers
 
         }
 
-        public ActionResult AddBook(BookModel model)
-        {
-
-            ViewBag.Authors = GetAuthors(null);
-          //  List<Author> authors = db.Authors.Find()
-            Biblioteca.DataAccess.Book Book = new Biblioteca.DataAccess.Book
-            {
-                name = model.Name,
-                ISBN = model.ISBN,
-                release_date = model.ReleaseDate,
-                nr_copies=model.NrCopies,
-                on_loan=model.OnLoan,
-                shelf_id=model.ShelfID,
-            };
-          
-            //var ba = new BookAuthor
-            //{
-            //    author_id = model.ID,
-            //    book_id = model.AID
-            //};
-
-            db.Books.Add(Book);
-
-//            db.BookAuthors.Add(ba);
-            
-            if (ModelState.IsValid)
-            {
-  //              db.BookAuthors.Add(ba);
-                //db.Books.Add(Book);
-
-                //db.SaveChanges();
-                  //  return RedirectToAction("Index");
-            }
-
-            return View();
-        }
-        public ActionResult AddAuthorsToBook()
-        {
-            return View();
-        }
-        
         public ActionResult Edit(int id=1)
         {
             Biblioteca.DataAccess.Book book = db.Books.Find(id);
@@ -166,19 +125,28 @@ namespace Biblioteca.Controllers
             return View(edit);
         }
         [HttpPost]
-        public ActionResult Edit (BookModel edited)
+        public ActionResult Edit (BookAuthorViewModel edited)
         {
             try
             {
+               
+                BookAuthorViewModel book2 = new BookAuthorViewModel
+                {
+                    Book=edited.Book,
+                    Authors=edited.Authors  
+                };
+
                 Biblioteca.DataAccess.Book book = new Biblioteca.DataAccess.Book
                 {
-                    id = edited.ID,
-                    ISBN = edited.ISBN,
-                    name = edited.Name,
-                    nr_copies = edited.NrCopies,
-                    on_loan = edited.OnLoan,
-                    release_date = edited.ReleaseDate,
-                    shelf_id = edited.ShelfID
+                    id = edited.Book.id,
+                    ISBN = book2.Book.ISBN,
+                    name = book2.Book.name,
+                    nr_copies = book2.Book.nr_copies,
+                    on_loan = book2.Book.on_loan,
+                    release_date = book2.Book.release_date,
+                    shelf_id = book2.Book.shelf_id
+                   
+                    
                 };
                 db.Books.Add(book);
                 if (ModelState.IsValid)
@@ -207,7 +175,8 @@ namespace Biblioteca.Controllers
         public ActionResult DeleteBookAuthor(int bid,int aid)
         {
             Book book = db.Books.Find(bid);
-            book.BookAuthors.Remove(book.BookAuthors.Where(id=>id.author_id==aid).First());
+            BookAuthor ba = db.BookAuthors.Find(aid);
+            book.BookAuthors.Remove(ba);
             if (ModelState.IsValid)
             {
                 db.Entry(book).State = EntityState.Modified;
