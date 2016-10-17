@@ -6,6 +6,62 @@
 <h2>Edit</h2>
 @section Scripts{
     <script type="text/javascript">
+        function RefreshAutocomplete() {
+            // Remove handler from existing elements
+            $("#wrapper .authorSelect").off(); 
+
+            // Re-add event handler for all matching elements
+            $("#wrapper .authorSelect").on("click", function() {
+                // Handle event.
+                
+                    $(".authorSelect").autocomplete({
+                        source: function (request, response) {
+                            $.ajax({
+                                url: '@Url.Action("AutoComplete", "Book", null, Request.Url.Scheme)',
+                                data: "{ 'prefix': '" + request.term + "'}",
+                                dataType: "json",
+                                type: "POST",
+                                contentType: "application/json; charset=utf-8",
+                                success: function (data) {
+                                    response($.map(data, function (item) {
+                                        return item;
+                                    }))
+                                },
+                                error: function (response) {
+                                    alert(response.responseText);
+                                },
+                                failure: function (response) {
+                                    alert(response.responseText);
+                                }
+                            });
+                        },
+                        select: function (e, i) {
+                            $(".authorId").val(i.item.val);
+                        },
+                        minLength: 1
+                    });
+            })
+            }
+        function myFunction() {
+            var field = document.createElement("INPUT");
+            field.setAttribute("name", "first_name")
+            field.setAttribute("type", "text");
+            field.setAttribute("class", "authorSelect");
+            var button = document.createElement("BUTTON");
+            var id = document.createElement("INPUT");
+            id.setAttribute("type", "hidden");
+            id.setAttribute("name", "id");
+            id.setAttribute("class", "authorId");
+            var t = document.createTextNode("Save");
+            button.appendChild(t);
+           
+            document.getElementById('main').appendChild(field);
+            document.getElementById('main').appendChild(button);
+            document.getElementById('main').appendChild(id);
+            RefreshAutocomplete();
+
+        }
+  
 
         $(document).ready(function () {
             $('#btnMinus').click(function () {
@@ -14,102 +70,153 @@
                     var authorId =$('#authorId').val();
                     $.ajax({
                         type: "POST",
-                        url: 'DeleteBookAuthor',
+                        url: '@Url.Action("DeleteBookAuthor", "Book", null, Request.Url.Scheme)',
                         data: { bid: bookId, aid: authorId }
                     }).done(function () {
                         alert('Author Deleted');
-                    }).error(function(){
-                        alert('Something is not going as supposed');
-                    });
+                        location.reload();
+
+                        }).error(function(){
+                            alert('Something is not going as supposed');
+                        });
+                RefreshAutocomplete();
                 });
             })
 
     </script>
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.0.min.js" type="text/javascript"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/jquery-ui.min.js" type="text/javascript"></script>
+<link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/themes/blitzer/jquery-ui.css"
+      rel="Stylesheet" type="text/css" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.authorSelect').click(function () {
+            $(".authorSelect").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '@Url.Action("AutoComplete", "Book", null, Request.Url.Scheme)',
+                        data: "{ 'prefix': '" + request.term + "'}",
+                        dataType: "json",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return item;
+                            }))
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                },
+                select: function (e, i) {
+                    $(".authorId").val(i.item.val);
+                },
+                minLength: 1
+            });
+        });
+        })
+    </script>
  }
 
 
+<div id="main">
+    @using (Html.BeginForm(FormMethod.Post))
+    {
+        @Html.ValidationSummary(true)
+        <fieldset>
+            <legend>Book</legend>
+            @Html.HiddenFor(model => model.Book.id)
 
-@using (Html.BeginForm(FormMethod.Post))
-{
-    @Html.ValidationSummary(true)
-     <fieldset>
-         <legend>Book</legend>
-         @Html.HiddenFor(model=>model.Book.id)
-      
-         @Html.HiddenFor(model=>model.Book.shelf_id)
-         <div class="editor-label">
-             <label>Title</label>
-         </div>
-         <div class="editor-field">
-             @Html.TextBoxFor(model=>model.Book.name)
-             @Html.ValidationMessageFor(model=>model.Book.name)
-         </div>
-
-         <div class="editor-label">
-             @Html.LabelFor(model=>model.Book.ISBN)
-         </div>
-         <div class="editor-field">
-             @Html.TextBoxFor(model => model.Book.ISBN)
-             @Html.ValidationMessageFor(model=>model.Book.ISBN)
-         </div>
-
-         <div class="editor-label">
-             <label>Release Date</label>
-         </div>
-         <div class="editor-field">
-             @Html.TextBoxFor(model => model.Book.release_date)
-             @Html.ValidationMessageFor(model=>model.Book.release_date)
-         </div>
-         <div class="editor-label">
-             <label>On Loan Qty</label>
-         </div>
-         <div class="editor-field">
-             @Html.TextBoxFor(model => model.Book.on_loan)
-             @Html.ValidationMessageFor(model=>model.Book.on_loan)
-         </div>
-         <div class="editor-label">
-             <label>Nr Copies</label>
-         </div>
-         <div class="editor-field">
-             @Html.TextBoxFor(model=>model.Book.nr_copies)
-             @Html.ValidationMessageFor(model=>model.Book.nr_copies)
-         </div>
-       
-         <hr />
-         <div>
-             <label>Authors</label>
-         </div>
-         @foreach (var author in Model.Authors)
-         {
-            <div>
-                <table>
-                    <tr>
-                        <td><label>First Name</label></td>
-                        <td><label>Last Name</label></td>
-                    </tr>
-                    <tr>
-                        <td>@Html.TextBoxFor(model => author.first_name)</td>
-
-                        <td>@Html.TextBoxFor(model => author.last_name)</td>
-                        <td><input id="btnMinus" type="button" value="-"/></td>
-                        <td><input id="authorId" type="hidden" value="@author.id" /></td>
-                        <td>
-                            <input type="hidden" id="bookId" value="@Model.Book.id" />
-                        </td>
-                    </tr>
-                
-                </table>
+            @Html.HiddenFor(model => model.Book.shelf_id)
+            <div class="editor-label">
+                <label>Title</label>
             </div>
-         }
-         <input type="button" value="+" />
-         <hr />
-         <p>
-             <input type="submit" value="Save" />
-         </p>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Book.name)
+                @Html.ValidationMessageFor(model => model.Book.name)
+            </div>
 
-         
-     </fieldset>  
-      }
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Book.ISBN)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Book.ISBN)
+                @Html.ValidationMessageFor(model => model.Book.ISBN)
+            </div>
+
+            <div class="editor-label">
+                <label>Release Date</label>
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Book.release_date)
+                @Html.ValidationMessageFor(model => model.Book.release_date)
+            </div>
+            <div class="editor-label">
+                <label>On Loan Qty</label>
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Book.on_loan)
+                @Html.ValidationMessageFor(model => model.Book.on_loan)
+            </div>
+            <div class="editor-label">
+                <label>Nr Copies</label>
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Book.nr_copies)
+                @Html.ValidationMessageFor(model => model.Book.nr_copies)
+            </div>
+
+            <hr />
+            <div>
+                <label>Authors</label>
+            </div>
+            @foreach (var author in Model.Authors)
+            {
+                <div>
+                    <table>
+                        <tr>
+                            <td><label>First Name</label></td>
+                            <td><label>Last Name</label></td>
+                        </tr>
+                        <tr>
+                            <td>@Html.TextBoxFor(model => author.first_name)</td>
+                            <td>@Html.TextBoxFor(model => author.last_name)</td>
+                            <td><input id="btnMinus" type="button" value="-" /></td>
+
+                            <td><input type="hidden" id="authorId" value="@author.id" /></td>
+                            <td><input type="hidden" id="bookId" value="@Model.Book.id" /></td>
+
+                        </tr>
+
+                    </table>
+                </div>
+            }
+            <table>
+                <tr>
+
+                    <td>
+                        <input type="text" name="first_name" class="authorSelect" />
+                        <input type="hidden" name="id" class="authorId"  />
+                        <br /><br />
+                    </td>
+                    <td>
+                        <input type="button" id="btnPlus" value="+" onclick="myFunction()" />
+                    </td>
+                </tr>
+            </table>
+            <hr />
+            <p>
+                <input type="submit" value="Save" class="authSubmit" />
+            </p>
+
+
+        </fieldset>
+    }
+</div>
 <div>
     
     @Html.ActionLink("Back to List", "Index")

@@ -61,8 +61,10 @@
                 @Html.ValidationMessageFor(model => model.Book.shelf_id, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group">
-            <label>Authors</label>
+        <div class="form-group" style="padding-left:70px">
+            <div style="padding-left:20px">
+                <label>Authors</label>
+            </div>
             <div class="col-md-10">
                 @Html.ListBoxFor(m => m.SelectedAuthors,new MultiSelectList(Model.Authors, "id", "first_name"), null)
             </div>

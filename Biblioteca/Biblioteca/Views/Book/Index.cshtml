@@ -41,23 +41,8 @@
                         @Html.ActionLink("Delete", "Delete", new { id = book.ID })
                     </td>
                 </tr>
-
-
-                    <!--<dt>
-                       Html.DisplayFor(mode=>book.NrCopies)
-                    </dt>
-                    <dt>
-                            Html.DisplayFor(model=>book.OnLoan)
-                    </dt>
-                    <dt>
-                        Html.DisplayFor(model=>book.ShelfID)
-                    </dt>-->
                 }
-            
-
-           
         </table>
-
 </div>
 
 
@@ -70,12 +55,7 @@
 <p>
     <hr/>
     <table>
-        <tr>
-        <td>@Html.ActionLink("Add a new book", "AddBook")</td>
-        </tr>
-        <tr>
-            <td>@Html.ActionLink("Add a new author","AddAuthor","Author")</td>
-        </tr>
+        
         <tr>
             <td>@Html.ActionLink("New Book", "Create")</td>
         </tr>

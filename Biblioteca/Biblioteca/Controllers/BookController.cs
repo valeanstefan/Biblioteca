@@ -162,30 +162,43 @@ namespace Biblioteca.Controllers
         
             return View();
         }
-        
-        public ActionResult EditAddAuthors(List<Author> currAuthors)
+   
+
+        [HttpPost]
+        public JsonResult AutoComplete(string prefix)
         {
-            List<Author> remAuthors = db.Authors.ToList();
-            foreach(var author in currAuthors)
-            {
-                remAuthors.Remove(currAuthors.First());
-            }
-            return PartialView(remAuthors);
+            var AuthorsFromContext = db.Authors;
+            var authors = (from author in AuthorsFromContext
+                             where author.first_name.StartsWith(prefix)
+                             select new
+                             {
+                                 label = author.first_name+" "+author.last_name,
+                                 val = author.id
+                             }).ToList();
+
+            return Json(authors);
         }
+
+        [HttpPost]
         public ActionResult DeleteBookAuthor(int bid,int aid)
-        {
-            Book book = db.Books.Find(bid);
-            BookAuthor ba = db.BookAuthors.Find(aid);
-            book.BookAuthors.Remove(ba);
+        {            
             if (ModelState.IsValid)
             {
-                db.Entry(book).State = EntityState.Modified;
+                Book book = db.Books.Find(bid);
+                BookAuthor baObj = db.BookAuthors.
+                    Where(ba => ba.author_id == aid
+                        && ba.book_id == bid
+                    ).FirstOrDefault();
+
+                db.BookAuthors.Remove(baObj);
+                
                 db.SaveChanges();
                 return RedirectToAction("Edit");
             }
             return View();
 
         }
+
         public ActionResult Delete(int? id)
         {
             if (id == null)
