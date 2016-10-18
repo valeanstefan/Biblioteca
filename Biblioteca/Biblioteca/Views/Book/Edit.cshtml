@@ -6,68 +6,28 @@
 <h2>Edit</h2>
 @section Scripts{
     <script type="text/javascript">
-        function RefreshAutocomplete() {
-            // Remove handler from existing elements
-            $("#wrapper .authorSelect").off(); 
-
-            // Re-add event handler for all matching elements
-            $("#wrapper .authorSelect").on("click", function() {
-                // Handle event.
-                
-                    $(".authorSelect").autocomplete({
-                        source: function (request, response) {
-                            $.ajax({
-                                url: '@Url.Action("AutoComplete", "Book", null, Request.Url.Scheme)',
-                                data: "{ 'prefix': '" + request.term + "'}",
-                                dataType: "json",
-                                type: "POST",
-                                contentType: "application/json; charset=utf-8",
-                                success: function (data) {
-                                    response($.map(data, function (item) {
-                                        return item;
-                                    }))
-                                },
-                                error: function (response) {
-                                    alert(response.responseText);
-                                },
-                                failure: function (response) {
-                                    alert(response.responseText);
-                                }
-                            });
-                        },
-                        select: function (e, i) {
-                            $(".authorId").val(i.item.val);
-                        },
-                        minLength: 1
-                    });
-            })
-            }
+        
         function myFunction() {
             var field = document.createElement("INPUT");
             field.setAttribute("name", "first_name")
             field.setAttribute("type", "text");
             field.setAttribute("class", "authorSelect");
             var button = document.createElement("BUTTON");
+            button.setAttribute("class", "authSubmit");
             var id = document.createElement("INPUT");
             id.setAttribute("type", "hidden");
             id.setAttribute("name", "id");
             id.setAttribute("class", "authorId");
             var t = document.createTextNode("Save");
             button.appendChild(t);
-           
             document.getElementById('main').appendChild(field);
             document.getElementById('main').appendChild(button);
             document.getElementById('main').appendChild(id);
-            RefreshAutocomplete();
-
         }
-  
-
         $(document).ready(function () {
-            $('#btnMinus').click(function () {
-                
-                    var bookId =$('#bookId').val();
-                    var authorId =$('#authorId').val();
+            $(document).on("click",".btnMinus",function () {
+                    var bookId =$('.bookId').val();
+                    var authorId =$('.authorId').val();
                     $.ajax({
                         type: "POST",
                         url: '@Url.Action("DeleteBookAuthor", "Book", null, Request.Url.Scheme)',
@@ -79,7 +39,6 @@
                         }).error(function(){
                             alert('Something is not going as supposed');
                         });
-                RefreshAutocomplete();
                 });
             })
 
@@ -90,34 +49,34 @@
       rel="Stylesheet" type="text/css" />
     <script type="text/javascript">
         $(document).ready(function () {
-            $('.authorSelect').click(function () {
-            $(".authorSelect").autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: '@Url.Action("AutoComplete", "Book", null, Request.Url.Scheme)',
-                        data: "{ 'prefix': '" + request.term + "'}",
-                        dataType: "json",
-                        type: "POST",
-                        contentType: "application/json; charset=utf-8",
-                        success: function (data) {
-                            response($.map(data, function (item) {
-                                return item;
-                            }))
-                        },
-                        error: function (response) {
-                            alert(response.responseText);
-                        },
-                        failure: function (response) {
-                            alert(response.responseText);
-                        }
-                    });
-                },
-                select: function (e, i) {
-                    $(".authorId").val(i.item.val);
-                },
-                minLength: 1
-            });
-        });
+            $(document).on("click", ".authorSelect", function () {
+                $(".authorSelect").autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: '@Url.Action("AutoComplete", "Book", null, Request.Url.Scheme)',
+                            data: "{ 'prefix': '" + request.term + "'}",
+                            dataType: "json",
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                            success: function (data) {
+                                response($.map(data, function (item) {
+                                    return item;
+                                }))
+                            },
+                            error: function (response) {
+                                alert(response.responseText);
+                            },
+                            failure: function (response) {
+                                alert(response.responseText);
+                            }
+                        });
+                    },
+                    select: function (e, i) {
+                        $(".authorId").val(i.item.val);
+                    },
+                    minLength: 1
+                });
+            });            
         })
     </script>
  }
@@ -174,7 +133,7 @@
             <div>
                 <label>Authors</label>
             </div>
-            @foreach (var author in Model.Authors)
+            @for (int i=0; i<Model.Authors.Count();i++)
             {
                 <div>
                     <table>
@@ -183,12 +142,12 @@
                             <td><label>Last Name</label></td>
                         </tr>
                         <tr>
-                            <td>@Html.TextBoxFor(model => author.first_name)</td>
-                            <td>@Html.TextBoxFor(model => author.last_name)</td>
-                            <td><input id="btnMinus" type="button" value="-" /></td>
+                            <td>@Html.TextBoxFor(model=>Model.Authors[i].first_name)</td>
+                            <td>@Html.TextBoxFor(model => Model.Authors[i].last_name)</td>
+                            <td><input class="btnMinus" type="button" value="-" /></td>
 
-                            <td><input type="hidden" id="authorId" value="@author.id" /></td>
-                            <td><input type="hidden" id="bookId" value="@Model.Book.id" /></td>
+                            <td><input type="hidden" class="authorId" value="@Model.Authors[i].id" /></td>
+                            <td><input type="hidden" class="bookId" value="@Model.Book.id" /></td>
 
                         </tr>
 
@@ -200,17 +159,18 @@
 
                     <td>
                         <input type="text" name="first_name" class="authorSelect" />
-                        <input type="hidden" name="id" class="authorId"  />
+                        <input type="hidden" name="id" class="authorId"/>
                         <br /><br />
                     </td>
                     <td>
-                        <input type="button" id="btnPlus" value="+" onclick="myFunction()" />
+                        <input type="button" id="btnPlus" value="+" onclick="myFunction()"/>
                     </td>
                 </tr>
             </table>
             <hr />
             <p>
                 <input type="submit" value="Save" class="authSubmit" />
+                
             </p>
 
 

@@ -129,28 +129,42 @@ namespace Biblioteca.Controllers
         {
             try
             {
-               
-                BookAuthorViewModel book2 = new BookAuthorViewModel
+                var baid = Request.Params.GetValues("id");
+                List<BookAuthor> bookAuthors = new List<BookAuthor>();
+                //BookAuthor newOne = new BookAuthor
+                //{
+                //    author_id = int.Parse(baid.First()),book_id=edited.Book.id
+                //};
+                if(baid!=null)
+               foreach(var id in baid)
                 {
-                    Book=edited.Book,
-                    Authors=edited.Authors  
-                };
+                    bookAuthors.Add(new BookAuthor {
+                         author_id=int.Parse(id),
+                         book_id=edited.Book.id
 
+                    });
+                }
                 Biblioteca.DataAccess.Book book = new Biblioteca.DataAccess.Book
                 {
                     id = edited.Book.id,
-                    ISBN = book2.Book.ISBN,
-                    name = book2.Book.name,
-                    nr_copies = book2.Book.nr_copies,
-                    on_loan = book2.Book.on_loan,
-                    release_date = book2.Book.release_date,
-                    shelf_id = book2.Book.shelf_id
-                   
-                    
+                    ISBN = edited.Book.ISBN,
+                    name = edited.Book.name,
+                    nr_copies = edited.Book.nr_copies,
+                    on_loan = edited.Book.on_loan,
+                    release_date = edited.Book.release_date,
+                    shelf_id =edited.Book.shelf_id
                 };
+               
                 db.Books.Add(book);
+                
                 if (ModelState.IsValid)
                 {
+                    if(bookAuthors!=null)
+                    foreach (var ba in bookAuthors)
+                    {
+                        db.BookAuthors.Add(ba);
+                    }
+                    
                     db.Entry(book).State = EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -189,9 +203,7 @@ namespace Biblioteca.Controllers
                     Where(ba => ba.author_id == aid
                         && ba.book_id == bid
                     ).FirstOrDefault();
-
-                db.BookAuthors.Remove(baObj);
-                
+                db.BookAuthors.Remove(baObj);  
                 db.SaveChanges();
                 return RedirectToAction("Edit");
             }
