@@ -164,7 +164,16 @@ namespace Biblioteca.Controllers
                     {
                         db.BookAuthors.Add(ba);
                     }
-                    
+                   // List<BookAuthor> toDelete = new List<BookAuthor>();
+                    //foreach (var id in edited.DeletedAuthors)
+                    //{
+                    //    BookAuthor newBA = db.BookAuthors.Where(ba=>ba.author_id==id&&ba.book_id==edited.Book.id).First();
+                    //    toDelete.Add(newBA);
+                    //}
+                    //foreach(var ba in toDelete)
+                    //{
+                    //    db.BookAuthors.Remove(ba);
+                    //}
                     db.Entry(book).State = EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -187,29 +196,45 @@ namespace Biblioteca.Controllers
                              select new
                              {
                                  label = author.first_name+" "+author.last_name,
-                                 val = author.id
+                                 val = author.id,
+                                 author=author
                              }).ToList();
 
             return Json(authors);
         }
 
         [HttpPost]
-        public ActionResult DeleteBookAuthor(int bid,int aid)
+        public ActionResult DeleteBookAuthor(int bid,List<int> aid)
         {            
             if (ModelState.IsValid)
             {
                 Book book = db.Books.Find(bid);
+                foreach(var id in aid) { 
                 BookAuthor baObj = db.BookAuthors.
-                    Where(ba => ba.author_id == aid
+                    Where(ba => ba.author_id ==id
                         && ba.book_id == bid
                     ).FirstOrDefault();
-                db.BookAuthors.Remove(baObj);  
+                db.BookAuthors.Remove(baObj);
+                }
                 db.SaveChanges();
                 return RedirectToAction("Edit");
             }
             return View();
 
         }
+        //public ActionResult PopulateAuthorToDelete(int bid,int aid)
+        //{
+        //    Book book = db.Books.Find(bid);
+        //    List<BookAuthor> baObj = new List<BookAuthor>();
+
+        //    baObj.Add(db.BookAuthors.
+        //           Where(ba => ba.author_id == aid
+        //               && ba.book_id == bid
+        //           ).FirstOrDefault();
+                   
+            
+        //    return View("Edit",baObj);
+        //}
 
         public ActionResult Delete(int? id)
         {

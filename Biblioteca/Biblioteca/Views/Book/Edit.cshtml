@@ -5,50 +5,43 @@
 
 <h2>Edit</h2>
 @section Scripts{
-    <script type="text/javascript">
-        
-        function myFunction() {
-            var field = document.createElement("INPUT");
-            field.setAttribute("name", "first_name")
-            field.setAttribute("type", "text");
-            field.setAttribute("class", "authorSelect");
-            var button = document.createElement("BUTTON");
-            button.setAttribute("class", "authSubmit");
-            var id = document.createElement("INPUT");
-            id.setAttribute("type", "hidden");
-            id.setAttribute("name", "id");
-            id.setAttribute("class", "authorId");
-            var t = document.createTextNode("Save");
-            button.appendChild(t);
-            document.getElementById('main').appendChild(field);
-            document.getElementById('main').appendChild(button);
-            document.getElementById('main').appendChild(id);
-        }
-        $(document).ready(function () {
-            $(document).on("click",".btnMinus",function () {
-                    var bookId =$('.bookId').val();
-                    var authorId =$('.authorId').val();
-                    $.ajax({
-                        type: "POST",
-                        url: '@Url.Action("DeleteBookAuthor", "Book", null, Request.Url.Scheme)',
-                        data: { bid: bookId, aid: authorId }
-                    }).done(function () {
-                        alert('Author Deleted');
-                        location.reload();
-
-                        }).error(function(){
-                            alert('Something is not going as supposed');
-                        });
-                });
-            })
-
-    </script>
 <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.0.min.js" type="text/javascript"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/jquery-ui.min.js" type="text/javascript"></script>
 <link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/themes/blitzer/jquery-ui.css"
       rel="Stylesheet" type="text/css" />
     <script type="text/javascript">
         $(document).ready(function () {
+            $("#btnPlus").click(function () {
+                var lastIndex = parseInt($("input.index:last").val());
+                
+                alert(lastIndex);
+              var element = $(".dummy").clone();
+              element.removeClass("dummy");
+              element.find(".fn").attr("name", "authors[" + (lastIndex + 1) + "]");
+              element.find(".index").val(lastIndex + 1);
+              
+              element.insertAfter("tr.after");
+            })
+            $(document).on("click", ".btnMinus", function () {
+                
+             @*var bookId =$('.bookId').val();
+                var authorId = $('.authorId').val();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DeleteBookAuthor", "Book", null, Request.Url.Scheme)',
+                    data: { bid: bookId, aid: authorId }
+                }).done(function () {
+                    alert('Author Deleted');
+                    location.reload();
+
+                }).error(function(){
+                    alert('Something is not going as supposed');
+                });*@
+        $(this).parent().parent().remove();
+              
+                //$("#authorTable").remove(element);
+            });
+            var author = null;
             $(document).on("click", ".authorSelect", function () {
                 $(".authorSelect").autocomplete({
                     source: function (request, response) {
@@ -60,6 +53,7 @@
                             contentType: "application/json; charset=utf-8",
                             success: function (data) {
                                 response($.map(data, function (item) {
+                                    author = item.author;
                                     return item;
                                 }))
                             },
@@ -133,33 +127,38 @@
             <div>
                 <label>Authors</label>
             </div>
-            @for (int i=0; i<Model.Authors.Count();i++)
-            {
-                <div>
-                    <table>
+            <table id="authorTable">
+                <tr>
+                    <th><label>First Name</label></th>
+                    <th><label>Last Name</label></th>
+                </tr>
+                <tr class="dummy">
+                    <td class="first_name"><input type="text" class="fn" /></td>
+                    <td class="last_name"><input type="text" class="ln" /></td>
+                    <td><input class="btnMinus" type="button" value="-" /></td>
+                    <td><input type="hidden" class="authorId"/></td>
+                    <td><input type="hidden" class="bookId" /></td>
+                    <td><input type="hidden" class="index" /></td>
+                </tr>
+                    @for (int i = 0; i < Model.Authors.Count(); i++)
+                {
                         <tr>
-                            <td><label>First Name</label></td>
-                            <td><label>Last Name</label></td>
-                        </tr>
-                        <tr>
-                            <td>@Html.TextBoxFor(model=>Model.Authors[i].first_name)</td>
+                            <td>@Html.TextBoxFor(model => Model.Authors[i].first_name)</td>
                             <td>@Html.TextBoxFor(model => Model.Authors[i].last_name)</td>
                             <td><input class="btnMinus" type="button" value="-" /></td>
-
                             <td><input type="hidden" class="authorId" value="@Model.Authors[i].id" /></td>
                             <td><input type="hidden" class="bookId" value="@Model.Book.id" /></td>
-
+                            <td><input type="hidden" class="index" value="@i" /></td>
                         </tr>
-
-                    </table>
-                </div>
-            }
+                }
+              <tr class="after"></tr>
+            </table>
             <table>
                 <tr>
 
                     <td>
                         <input type="text" name="first_name" class="authorSelect" />
-                        <input type="hidden" name="id" class="authorId"/>
+                        @*<input type="hidden" name="id" class="authorId"/>*@
                         <br /><br />
                     </td>
                     <td>
