@@ -23,6 +23,7 @@ namespace Biblioteca.DataAccess
         [Required]
         [StringLength(50)]
         public string last_name { get; set; }
+        
 
         public virtual ICollection<BookAuthor> BookAuthors { get; set; }
     }

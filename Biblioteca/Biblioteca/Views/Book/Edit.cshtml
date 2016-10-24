@@ -11,33 +11,22 @@
       rel="Stylesheet" type="text/css" />
     <script type="text/javascript">
         $(document).ready(function () {
+            var lastIndex = parseInt($("input.index:last").val());
             $("#btnPlus").click(function () {
-                var lastIndex = parseInt($("input.index:last").val());
-                
-                alert(lastIndex);
+              
+              //alert(lastIndex);
               var element = $(".dummy").clone();
               element.removeClass("dummy");
-              element.find(".fn").attr("name", "authors[" + (lastIndex + 1) + "]");
+              element.find(".authorSelect").attr("name", "authors["+lastIndex+"]");
               element.find(".index").val(lastIndex + 1);
               
-              element.insertAfter("tr.after");
+             
+              lastIndex = lastIndex + 1;
+              
+              element.insertBefore("tr.after");
             })
             $(document).on("click", ".btnMinus", function () {
-                
-             @*var bookId =$('.bookId').val();
-                var authorId = $('.authorId').val();
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("DeleteBookAuthor", "Book", null, Request.Url.Scheme)',
-                    data: { bid: bookId, aid: authorId }
-                }).done(function () {
-                    alert('Author Deleted');
-                    location.reload();
-
-                }).error(function(){
-                    alert('Something is not going as supposed');
-                });*@
-        $(this).parent().parent().remove();
+                 $(this).parent().parent().remove();
               
                 //$("#authorTable").remove(element);
             });
@@ -56,6 +45,7 @@
                                     author = item.author;
                                     return item;
                                 }))
+                               
                             },
                             error: function (response) {
                                 alert(response.responseText);
@@ -73,6 +63,14 @@
             });            
         })
     </script>
+    <style>
+    .dummy
+    {
+         display:none;
+         visibility:hidden;
+    }
+        
+    </style>
  }
 
 
@@ -133,15 +131,16 @@
                     <th><label>Last Name</label></th>
                 </tr>
                 <tr class="dummy">
-                    <td class="first_name"><input type="text" class="fn" /></td>
-                    <td class="last_name"><input type="text" class="ln" /></td>
+                    <td class="first_name"><input type="text" class="authorSelect" /></td>
+                   
+                    <!--<td class="last_name"><input type="text" class="ln" /></td>--> 
                     <td><input class="btnMinus" type="button" value="-" /></td>
-                    <td><input type="hidden" class="authorId"/></td>
-                    <td><input type="hidden" class="bookId" /></td>
+                    <td><input type="hidden" name="id" class="authorId" /></td>
+                    <td><input type="hidden" class="bookId" value="@Model.Book.id" /></td>
                     <td><input type="hidden" class="index" /></td>
                 </tr>
                     @for (int i = 0; i < Model.Authors.Count(); i++)
-                {
+                    {
                         <tr>
                             <td>@Html.TextBoxFor(model => Model.Authors[i].first_name)</td>
                             <td>@Html.TextBoxFor(model => Model.Authors[i].last_name)</td>
@@ -157,12 +156,13 @@
                 <tr>
 
                     <td>
-                        <input type="text" name="first_name" class="authorSelect" />
+                        <!--<input type="text" name="first_name" class="authorSelect" />-->
+                        
                         @*<input type="hidden" name="id" class="authorId"/>*@
                         <br /><br />
                     </td>
                     <td>
-                        <input type="button" id="btnPlus" value="+" onclick="myFunction()"/>
+                        <input type="button" id="btnPlus" value="+"/>
                     </td>
                 </tr>
             </table>

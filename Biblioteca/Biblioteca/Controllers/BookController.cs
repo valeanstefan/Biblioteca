@@ -17,6 +17,7 @@ namespace Biblioteca.Controllers
         // GET: Book
 
         private BookDBContext db = new BookDBContext();
+       
         
         public ActionResult Index()
         {
@@ -135,12 +136,14 @@ namespace Biblioteca.Controllers
                 //{
                 //    author_id = int.Parse(baid.First()),book_id=edited.Book.id
                 //};
+                 
                 if(baid!=null)
                foreach(var id in baid)
                 {
-                    bookAuthors.Add(new BookAuthor {
-                         author_id=int.Parse(id),
-                         book_id=edited.Book.id
+                        bookAuthors.Add(new BookAuthor {
+                            
+                        author_id=int.Parse(id),
+                         book_id = edited.Book.id
 
                     });
                 }
