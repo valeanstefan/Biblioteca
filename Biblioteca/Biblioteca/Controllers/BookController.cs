@@ -111,9 +111,9 @@ namespace Biblioteca.Controllers
                 return HttpNotFound();
             }
             List<Author> auth = new List<Author>();
-            foreach(var author in book.BookAuthors)
+            foreach(var au in book.BookAuthors)
             {
-                auth.Add(author.Author);
+                auth.Add(au.Author);
             }
 
 
@@ -131,21 +131,30 @@ namespace Biblioteca.Controllers
             try
             {
                 var baid = Request.Params.GetValues("id");
-                List<BookAuthor> bookAuthors = new List<BookAuthor>();
-                //BookAuthor newOne = new BookAuthor
-                //{
-                //    author_id = int.Parse(baid.First()),book_id=edited.Book.id
-                //};
-                 
-                if(baid!=null)
-               foreach(var id in baid)
+                List<BookAuthor> BAList = new List<BookAuthor>();
+                if (baid != null)
                 {
-                        bookAuthors.Add(new BookAuthor {
-                            
-                        author_id=int.Parse(id),
-                         book_id = edited.Book.id
+                    foreach (var id in baid)
+                    {
+                        if (id != null)
+                        {
+                            BAList.Add(
+                                new BookAuthor
+                                {
+                                // Author = db.Authors.Where(aid=>aid.id==int.Parse(id)).First(),
+                                author_id = int.Parse(id),
+                                    book_id = edited.Book.id
+                                });
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var allBA in db.BookAuthors.Where(bid => bid.book_id == edited.Book.id))
+                    {
+                        db.BookAuthors.Remove(allBA);
+                    }
 
-                    });
                 }
                 Biblioteca.DataAccess.Book book = new Biblioteca.DataAccess.Book
                 {
@@ -155,28 +164,24 @@ namespace Biblioteca.Controllers
                     nr_copies = edited.Book.nr_copies,
                     on_loan = edited.Book.on_loan,
                     release_date = edited.Book.release_date,
-                    shelf_id =edited.Book.shelf_id
+                    shelf_id =edited.Book.shelf_id,
+                    BookAuthors=BAList
+                    
                 };
                
                 db.Books.Add(book);
                 
                 if (ModelState.IsValid)
                 {
-                    if(bookAuthors!=null)
-                    foreach (var ba in bookAuthors)
+                    if (BAList != null)
+                    foreach(var allBA in db.BookAuthors.Where(bid => bid.book_id == edited.Book.id))
+                        {
+                            db.BookAuthors.Remove(allBA);
+                        }
+                    foreach (var ba in BAList)
                     {
                         db.BookAuthors.Add(ba);
                     }
-                   // List<BookAuthor> toDelete = new List<BookAuthor>();
-                    //foreach (var id in edited.DeletedAuthors)
-                    //{
-                    //    BookAuthor newBA = db.BookAuthors.Where(ba=>ba.author_id==id&&ba.book_id==edited.Book.id).First();
-                    //    toDelete.Add(newBA);
-                    //}
-                    //foreach(var ba in toDelete)
-                    //{
-                    //    db.BookAuthors.Remove(ba);
-                    //}
                     db.Entry(book).State = EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -194,16 +199,16 @@ namespace Biblioteca.Controllers
         public JsonResult AutoComplete(string prefix)
         {
             var AuthorsFromContext = db.Authors;
+
             var authors = (from author in AuthorsFromContext
-                             where author.first_name.StartsWith(prefix)
-                             select new
-                             {
-                                 label = author.first_name+" "+author.last_name,
-                                 val = author.id,
-                                 author=author
+                           where author.first_name.StartsWith(prefix)
+                           select new
+                           {
+                               label = author.first_name + " " + author.last_name,
+                               val = author.id
                              }).ToList();
 
-            return Json(authors);
+            return Json(authors,JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

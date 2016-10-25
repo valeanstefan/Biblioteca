@@ -19,16 +19,12 @@
               element.removeClass("dummy");
               element.find(".authorSelect").attr("name", "authors["+lastIndex+"]");
               element.find(".index").val(lastIndex + 1);
-              
-             
+              element.find(".authorId").attr("name","id");
               lastIndex = lastIndex + 1;
-              
               element.insertBefore("tr.after");
             })
             $(document).on("click", ".btnMinus", function () {
                  $(this).parent().parent().remove();
-              
-                //$("#authorTable").remove(element);
             });
             var author = null;
             $(document).on("click", ".authorSelect", function () {
@@ -42,7 +38,6 @@
                             contentType: "application/json; charset=utf-8",
                             success: function (data) {
                                 response($.map(data, function (item) {
-                                    author = item.author;
                                     return item;
                                 }))
                                
@@ -56,7 +51,7 @@
                         });
                     },
                     select: function (e, i) {
-                        $(".authorId").val(i.item.val);
+                        $(".authorId",$(this).parents('tr')).val(i.item.val);
                     },
                     minLength: 1
                 });
@@ -135,7 +130,7 @@
                    
                     <!--<td class="last_name"><input type="text" class="ln" /></td>--> 
                     <td><input class="btnMinus" type="button" value="-" /></td>
-                    <td><input type="hidden" name="id" class="authorId" /></td>
+                    <td><input type="hidden"  class="authorId" /></td>
                     <td><input type="hidden" class="bookId" value="@Model.Book.id" /></td>
                     <td><input type="hidden" class="index" /></td>
                 </tr>
@@ -145,7 +140,7 @@
                             <td>@Html.TextBoxFor(model => Model.Authors[i].first_name)</td>
                             <td>@Html.TextBoxFor(model => Model.Authors[i].last_name)</td>
                             <td><input class="btnMinus" type="button" value="-" /></td>
-                            <td><input type="hidden" class="authorId" value="@Model.Authors[i].id" /></td>
+                            <td><input type="hidden" name="id" class="authorId" value="@Model.Authors[i].id" /></td>
                             <td><input type="hidden" class="bookId" value="@Model.Book.id" /></td>
                             <td><input type="hidden" class="index" value="@i" /></td>
                         </tr>

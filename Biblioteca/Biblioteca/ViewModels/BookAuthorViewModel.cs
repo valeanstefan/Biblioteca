@@ -10,7 +10,7 @@ namespace Biblioteca.ViewModels
 {
     public class BookAuthorViewModel
     {
-        public List<Author> Authors { get; set; }
+        public List<Author> Authors;
         public Book Book { get; set; }
         public List<int> SelectedAuthors { get; set; }
         public List<int> DeletedAuthors { get; set; }
